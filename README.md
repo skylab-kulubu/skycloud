@@ -74,6 +74,9 @@ curl -fsSL https://get.docker.com -o get-docker.sh && sudo bash get-docker.sh
 git clone https://github.com/farukerdem34/homeserver.git
 ```
 ```bash
+cd homeserver
+```
+```bash
 docker compose up -d
 ```
 
