@@ -48,6 +48,7 @@ Bunun için aşağıdaki komutu `gencert` klasörünün içerisinde çalıştır
 ```bash
 ❯ yes NA | bash ../gencert
 ```
+- [ ] SSL Sertifika otomasyonu eklenecek
 
 > Not: bunun için `openssl` paketinin sisteminizde kurulu olması gereklidir.
 
