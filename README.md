@@ -41,7 +41,7 @@ MYSQL_PASSWORD=nextcloud
 MySQL hakkında daha fazla ortam değişken [için](https://dev.mysql.com/doc/refman/5.7/en/environment-variables.html)
 
 ## Nginx
-- [+] HTTPS eklenecek
+- [X] HTTPS eklenecek
 `HTTPS` kullanımı için `gencert` scriptini çalıştırarak sertifikaları `certs` klasörüne eklemelisiniz.
 
 Bunun için aşağıdaki komutu `gencert` klasörünün içerisinde çalıştırmanız yeterli olacaktır.
