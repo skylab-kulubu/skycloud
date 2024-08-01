@@ -1,16 +1,18 @@
-# Skylab Homeserver
+# Skylab Homeserver Alpine
 
 <div align="center">
 <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"></img> <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"></img> <img src="https://img.shields.io/badge/Ghost-000?style=for-the-badge&logo=ghost&logoColor=yellow"></img> <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white"></img> <img src="https://img.shields.io/badge/Nextcloud-0082C9?style=for-the-badge&logo=Nextcloud&logoColor=white"></img> <img src="https://raw.githubusercontent.com/Stirling-Tools/Stirling-PDF/main/docs/stirling.png" width="30"/>
 </div>
 
-30.07.24 Tarihi ile kullanılan servisler:
+01.08.24 Tarihi ile kullanılan servisler:
 
 - [NextCloud](https://nextcloud.com/)
 - [MySQL](https://www.mysql.com/)
 - [Nginx](https://nginx.org/en/)
 - [Stirling-PDF](https://github.com/Stirling-Tools/Stirling-PDF)
 - [Ghost CMS](https://ghost.org/)
+- [Redis](https://hub.docker.com/_/redis)
+
 
 ## Nextcloud
 Gerekli ayarları yapmak için [.env](https://github.com/farukerdem34/SkylabHomeServer/blob/master/nextcloud/.env) dosyasını düzenlemelisiniz.
@@ -39,7 +41,16 @@ MYSQL_PASSWORD=nextcloud
 MySQL hakkında daha fazla ortam değişken [için](https://dev.mysql.com/doc/refman/5.7/en/environment-variables.html)
 
 ## Nginx
-- [ ] HTTPS eklenecek
+- [+] HTTPS eklenecek
+`HTTPS` kullanımı için `gencert` scriptini çalıştırarak sertifikaları `certs` klasörüne eklemelisiniz.
+
+Bunun için aşağıdaki komutu `gencert` klasörünün içerisinde çalıştırmanız yeterli olacaktır.
+```bash
+❯ yes NA | bash ../gencert
+```
+
+> Not: bunun için `openssl` paketinin sisteminizde kurulu olması gereklidir.
+
 # Canlıya Almadan Önce!
 nginx/nginx.conf dosyasındaki `localhost` değerlerini alan adı ile değiştirin!
 

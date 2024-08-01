@@ -7,26 +7,77 @@ services:
     env_file: ./mysql/.env
     networks:
       homeserver-network:
+        ipv4_address: 10.10.10.2
 
-  nextcloud:
-    image: nextcloud
+  redis:
+    image: redis:alpine
     restart: always
-    links:
-      - db
-    volumes:
-      - nextcloud:/var/www/html
-    env_file: ./nextcloud/.env
     networks:
       homeserver-network:
+        ipv4_address: 10.10.10.30
+    
 
+  nextcloud-fpm:
+    image: nextcloud:fpm-alpine
+    restart: always
+    volumes:
+      - nextcloud:/var/www/html:z
+    environment:
+      - MYSQL_HOST=db
+      - REDIS_HOST=redis
+    env_file:
+      - ./nextcloud/.env
+    depends_on:
+      - db
+      - redis
+    networks:
+      homeserver-network:
+        ipv4_address: 10.10.10.5
+
+  nextcloud-web:
+    build: ./nextcloud/web
+    restart: always
+    volumes:
+      - nextcloud:/var/www/html:z,ro
+    environment:
+      - VIRTUAL_HOST=nextcloud.localhost
+      - LETSENCRYPT_HOST=
+      - LETSENCRYPT_EMAIL=
+    depends_on:
+      - nextcloud-fpm
+    networks:
+      homeserver-network:
+        ipv4_address: 10.10.10.6
+
+  nextcloud-cron:
+    image: nextcloud:fpm-alpine
+    restart: always
+    volumes:
+      - nextcloud:/var/www/html:z
+    entrypoint: /cron.sh
+    depends_on:
+      - db
+      - redis
+    networks:
+      homeserver-network:
+        ipv4_address: 10.10.10.7
+ 
   nginx:
-    image: nginx
+    image: nginx:alpine
     ports:
       - 80:80
+      - 443:443
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/uploadsize.conf:/etc/nginx/conf.d/uploadsize.conf
+      - ./certs/mycert.key:/etc/nginx/mycert.key
+      - ./certs/mycert.crt:/etc/nginx/mycert.crt
+    labels:
+      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+
     networks:
       homeserver-network:
+        ipv4_address: 10.10.10.3
 
   stirling_pdf:
     image: frooodle/s-pdf:latest
@@ -41,15 +92,17 @@ services:
       - LANGS=en_GB
     networks:
       homeserver-network:
+        ipv4_address: 10.10.10.20
 
   blog:
-    image: ghost:5-alphine
+    image: ghost:5-alpine
     restart: always
     env_file: ./ghost/.env
     volumes:
       - ghost:/var/lib/ghost/content:rw
     networks:
       homeserver-network:
+        ipv4_address: 10.10.10.10
 
 networks:
   homeserver-network:
@@ -62,4 +115,5 @@ volumes:
   ghost:
   trainingData:
   extraConfigs:
+
 
