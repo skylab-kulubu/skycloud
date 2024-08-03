@@ -17,3 +17,6 @@ docker exec -u www-data  nextcloud-fpm php occ --no-warnings config:system:set o
 docker exec -u www-data  nextcloud-fpm php occ --no-warnings config:system:set onlyoffice DocumentServerInternalUrl --value="http://onlyoffice-document-server/"
 docker exec -u www-data  nextcloud-fpm php occ --no-warnings config:system:set onlyoffice StorageUrl --value="http://nextcloud-web/"
 docker exec -u www-data  nextcloud-fpm php occ --no-warnings config:system:set onlyoffice jwt_secret --value="nextcloud"
+
+
+docker exec -u www-data  nextcloud-fpm php occ --no-warnings app:install forms
