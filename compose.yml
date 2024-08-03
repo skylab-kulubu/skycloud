@@ -1,6 +1,7 @@
 services:
   db:
     image: mysql:8.0
+    container_name: db
     restart: always
     volumes:
       - db:/var/lib/mysql
@@ -15,11 +16,30 @@ services:
     networks:
       homeserver-network:
         ipv4_address: 10.10.10.30
-    
+
+  onlyoffice-document-server:
+    container_name: onlyoffice-document-server
+    image: onlyoffice/documentserver:latest
+    restart: always
+    environment:
+      - JWT_SECRET=nextcloud
+    expose:
+      - '80'
+      - '443'
+    volumes:
+      - document_data:/var/www/onlyoffice/Data
+      - document_log:/var/log/onlyoffice
+    networks:
+      homeserver-network:
+        ipv4_address: 10.10.10.8
 
   nextcloud-fpm:
     image: nextcloud:fpm-alpine
+    container_name: nextcloud-fpm
     restart: always
+    expose:
+      - 80
+      - 9000
     volumes:
       - nextcloud:/var/www/html:z
     environment:
@@ -36,6 +56,7 @@ services:
 
   nextcloud-web:
     build: ./nextcloud/web
+    container_name: nextcloud-web
     restart: always
     volumes:
       - nextcloud:/var/www/html:z,ro
@@ -51,6 +72,7 @@ services:
 
   nextcloud-cron:
     image: nextcloud:fpm-alpine
+    container_name: nextcloud-cron
     restart: always
     volumes:
       - nextcloud:/var/www/html:z
@@ -64,6 +86,7 @@ services:
  
   nginx:
     image: nginx:alpine
+    container_name: nginx
     ports:
       - 80:80
       - 443:443
@@ -81,6 +104,7 @@ services:
 
   stirling_pdf:
     image: frooodle/s-pdf:latest
+    container_name: stirling_pdf
     volumes:
       - trainingData:/usr/share/tessdata 
       - extraConfigs:/configs
@@ -96,6 +120,7 @@ services:
 
   blog:
     image: ghost:5-alpine
+    container_name: blog
     restart: always
     env_file: ./ghost/.env
     volumes:
@@ -115,5 +140,6 @@ volumes:
   ghost:
   trainingData:
   extraConfigs:
-
+  document_data:
+  document_log:
 
