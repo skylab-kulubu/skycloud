@@ -1,6 +1,7 @@
 services:
   db:
     image: mysql:8.0
+    container_name: db
     restart: always
     volumes:
       - db:/var/lib/mysql
@@ -19,6 +20,7 @@ services:
 
   nextcloud-fpm:
     image: nextcloud:fpm-alpine
+    container_name: nextcloud-fpm
     restart: always
     volumes:
       - nextcloud:/var/www/html:z
@@ -36,6 +38,7 @@ services:
 
   nextcloud-web:
     build: ./nextcloud/web
+    container_name: nextcloud-web
     restart: always
     volumes:
       - nextcloud:/var/www/html:z,ro
@@ -51,6 +54,7 @@ services:
 
   nextcloud-cron:
     image: nextcloud:fpm-alpine
+    container_name: nextcloud-cron
     restart: always
     volumes:
       - nextcloud:/var/www/html:z
@@ -64,6 +68,7 @@ services:
  
   nginx:
     image: nginx:alpine
+    container_name: nginx
     ports:
       - 80:80
       - 443:443
