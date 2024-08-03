@@ -1,10 +1,6 @@
 services:
   db:
-<<<<<<< HEAD
-    image: mysql:8.0
-=======
     image: mariadb:10.6
->>>>>>> dev
     container_name: db
     restart: always
     volumes:
