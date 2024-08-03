@@ -1,11 +1,15 @@
 services:
   db:
+<<<<<<< HEAD
     image: mysql:8.0
+=======
+    image: mariadb:10.6
+>>>>>>> dev
     container_name: db
     restart: always
     volumes:
       - db:/var/lib/mysql
-    env_file: ./mysql/.env
+    env_file: ./mariadb/.env
     networks:
       homeserver-network:
         ipv4_address: 10.10.10.2
@@ -16,12 +20,30 @@ services:
     networks:
       homeserver-network:
         ipv4_address: 10.10.10.30
-    
+
+  onlyoffice-document-server:
+    container_name: onlyoffice-document-server
+    image: onlyoffice/documentserver:latest
+    restart: always
+    environment:
+      - JWT_SECRET=nextcloud
+    expose:
+      - '80'
+      - '443'
+    volumes:
+      - document_data:/var/www/onlyoffice/Data
+      - document_log:/var/log/onlyoffice
+    networks:
+      homeserver-network:
+        ipv4_address: 10.10.10.8
 
   nextcloud-fpm:
     image: nextcloud:fpm-alpine
     container_name: nextcloud-fpm
     restart: always
+    expose:
+      - 80
+      - 9000
     volumes:
       - nextcloud:/var/www/html:z
     environment:
@@ -86,6 +108,7 @@ services:
 
   stirling_pdf:
     image: frooodle/s-pdf:latest
+    container_name: stirling_pdf
     volumes:
       - trainingData:/usr/share/tessdata 
       - extraConfigs:/configs
@@ -101,6 +124,7 @@ services:
 
   blog:
     image: ghost:5-alpine
+    container_name: blog
     restart: always
     env_file: ./ghost/.env
     volumes:
@@ -120,5 +144,6 @@ volumes:
   ghost:
   trainingData:
   extraConfigs:
-
+  document_data:
+  document_log:
 
