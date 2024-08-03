@@ -1,11 +1,11 @@
 services:
   db:
-    image: mysql:8.0
+    image: mariadb:10.6
     container_name: db
     restart: always
     volumes:
       - db:/var/lib/mysql
-    env_file: ./mysql/.env
+    env_file: ./mariadb/.env
     networks:
       homeserver-network:
         ipv4_address: 10.10.10.2
