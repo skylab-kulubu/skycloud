@@ -23,7 +23,7 @@ MYSQL_DATABASE=nextcloud
 MYSQL_USER=nextcloud
 MYSQL_PASSWORD=nextcloud
 MYSQL_HOST=db
-NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.localhost cloud.localhost
+NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.skylab.com cloud.skylab.com
 NEXTCLOUD_ADMIN_USER=nextcloud
 NEXTCLOUD_ADMIN_PASSWORD=nextcloud
 ```
@@ -34,7 +34,7 @@ Nextcloud hakkında daha fazla ortam değişkeni [için](https://hub.docker.com/
 Gerekli ayarları yapmak için [.env](https://github.com/farukerdem34/SkylabHomeServer/blob/master/mysql/.env) dosyasını düzenlemelisiniz.
 Örnek bir `mysql/.env` dosyası
 ```
-MYSQL_ROOT_PASSWORD=nextcloud
+MARIADB_ROOT_PASSWORD=nextcloud
 MYSQL_DATABASE=nextcloud
 MYSQL_USER=nextcloud
 MYSQL_PASSWORD=nextcloud
@@ -54,7 +54,7 @@ Bunun için aşağıdaki komutu `gencert` klasörünün içerisinde çalıştır
 > Not: bunun için `openssl` paketinin sisteminizde kurulu olması gereklidir.
 
 # Canlıya Almadan Önce!
-nginx/nginx.conf dosyasındaki `localhost` değerlerini alan adı ile değiştirin!
+nginx/nginx.conf dosyasındaki `skylab` değerlerini alan adı ile değiştirin!
 
 # Kurulum
 Sisteminizde `Docker` kurulu olmalı, eğer önceden `Docker` kurulu bir sisteminiz varsa ve sisteminizin paket yöneticisi aracılığıyla indirmişseniz `Docker`ı sisteminizden öncelikle silin ve aşağıdaki adımları izleyerek sisteminize `Docker` yükleyin.
