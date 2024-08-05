@@ -27,6 +27,8 @@ NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.skylab.com cloud.skylab.com
 NEXTCLOUD_ADMIN_USER=nextcloud
 NEXTCLOUD_ADMIN_PASSWORD=nextcloud
 ```
+### Dosya Yükleme Boyutu Sınırı
+[./nextcloud/web/nginx.conf](https://github.com/farukerdem34/homeserver/blob/alpine/nextcloud/web/nginx.conf) 62. satırdaki `client_max_body_size` değişkenini düzenleyerek dosya yükleme boyutun ayarlayabilirisiniz.
 
 Nextcloud hakkında daha fazla ortam değişkeni [için](https://hub.docker.com/_/nextcloud#docker-secrets)
 
