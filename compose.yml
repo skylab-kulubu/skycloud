@@ -21,8 +21,7 @@ services:
     container_name: onlyoffice-document-server
     image: onlyoffice/documentserver:latest
     restart: always
-    environment:
-      - JWT_SECRET=nextcloud
+    env_file: ./nextcloud/only-office/.env
     expose:
       - '80'
       - '443'

@@ -16,7 +16,7 @@
 
 
 ## Nextcloud
-Gerekli ayarları yapmak için [.env](https://github.com/farukerdem34/SkylabHomeServer/blob/master/nextcloud/.env) dosyasını düzenlemelisiniz.
+Gerekli ayarları yapmak için [.env](https://github.com/farukerdem34/homeserver/blob/alpine/nextcloud/example.env) dosyasını oluşturmalısınız.
 Örnek bir `nextcloud/.env` dosyası
 ```
 MYSQL_DATABASE=nextcloud
@@ -33,7 +33,7 @@ NEXTCLOUD_ADMIN_PASSWORD=nextcloud
 Nextcloud hakkında daha fazla ortam değişkeni [için](https://hub.docker.com/_/nextcloud#docker-secrets)
 
 ## MySQL
-Gerekli ayarları yapmak için [.env](https://github.com/farukerdem34/SkylabHomeServer/blob/master/mysql/.env) dosyasını düzenlemelisiniz.
+Gerekli ayarları yapmak için [.env](https://github.com/farukerdem34/homeserver/blob/alpine/mysql/example.env) dosyasını oluşturmalısınız.
 Örnek bir `mysql/.env` dosyası
 ```
 MARIADB_ROOT_PASSWORD=nextcloud
@@ -97,16 +97,4 @@ docker compose up -d
 NextCloud uygulamasına erişim sağladıktan sonra `nextcloud` klasörünün içerisinde bulunan `set_configuration.sh` dosyasını aşağıdaki komut ile çalıştırın.
 ```bash
 bash nextcloud/set_configuration.sh
-```
-# Yardımcı Script (Eksik Çalışabilir)
-```bash
-bash conf_script.sh db pass <pass>
-```
-
-```bash
-bash conf_script.sh domain <service> <domain>
-```
-
-```bash
-bash conf_script.sh domain <domain>
 ```

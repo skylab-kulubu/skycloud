@@ -1,3 +1,4 @@
+.env
 *.bak
 *.swp
 *.crt
