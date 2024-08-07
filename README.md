@@ -107,5 +107,6 @@ Options:
 - db
 - ghost
 - stirling-pdf
+
 Proje dizininde `/backup` klasörü oluşturulacak ve içerisinde yedeklemelere ulaşabilirsiniz.
 
