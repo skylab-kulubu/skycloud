@@ -98,4 +98,15 @@ NextCloud uygulamasına erişim sağladıktan sonra `nextcloud` klasörünün i�
 ```bash
 bash nextcloud/set_configuration.sh
 ```
+# Yardımcı Script (Eksik Çalışabilir)
+```bash
+bash conf_script.sh db pass <pass>
+```
 
+```bash
+bash conf_script.sh domain <service> <domain>
+```
+
+```bash
+bash conf_script.sh domain <domain>
+```
