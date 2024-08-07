@@ -135,10 +135,17 @@ networks:
         - subnet: 10.10.10.0/24
 volumes:
   nextcloud:
+    name: "nextcloud"
   db:
+    name: "db"
   ghost:
-  trainingData:
+    name: "ghost"
+  trainingData: 
+    name: "stirling-pdf-trainingData"
   extraConfigs:
+    name: "stirling-pdf-extraConfig"
   document_data:
+    name: "onlyoffice-document-data"
   document_log:
+    name: "onlyoffice-document-log"
 
