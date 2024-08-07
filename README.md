@@ -94,4 +94,8 @@ cd homeserver
 ```bash
 docker compose up -d
 ```
+NextCloud uygulamasına erişim sağladıktan sonra `nextcloud` klasörünün içerisinde bulunan `set_configuration.sh` dosyasını aşağıdaki komut ile çalıştırın.
+```bash
+bash nextcloud/set_configuration.sh
+```
 
