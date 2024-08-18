@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import subprocess
+import re
+import glob 
+import sys
+
+parser = argparse.ArgumentParser(description="Homeserver setup util")
+parser.add_argument("-c","--generate-certificates",action="store_true",help="Set this value if you want SSL certificates to be generated, set it to 'False' or leave it blank if you want to use test certificates.")
+parser.add_argument("--pass-certificate-arguments",action="store_true")
+parser.add_argument("--default-env-files",action="store_true",help="Set to 'True' if you want .env files to be created using standard instance files.")
+parser.add_argument("-d","--domain",type=str,help="Set Nginx nameserver",required=False)
+parser.add_argument("--upload-size",type=str,help="File upload size limit, 0 is unlimited. Example: 16G, 100M.",required=False)
+parser.add_argument("--nextcloud-subdomain",type=str,required=False,help="nextcloud.example.com --> replaces nextcloud to any subdomain string")
+args= parser.parse_args()
+
+def generate_certificates(pass_certificate_arguments:bool):
+    command = "bash ../gencert"
+    if pass_certificate_arguments:
+        command = "yes NA |" + command
+    cwd = os.getcwd()
+     
+    subprocess.run(command,shell=True,cwd=f"{cwd}/certs")
+
+
+
+def default_env_files():
+    cwd = os.getcwd()
+    files = glob.glob(os.path.join(cwd, '**', 'example.env'), recursive=True)
+
+    for file in files:
+        new_file = os.path.join(os.path.dirname(file), '.env')
+        os.rename(file, new_file)
+
+def set_domain(domain:str,nextcloud_subdomain:str="nextcloud"):
+    cwd = os.getcwd()
+    if len(domain.split(".")) == 3:
+        domain=domain.split(".")[1]
+    elif len(domain.split(".")) == 2:
+        domain=domain.split(".")[0]
+    with open(f"{cwd}/nginx/nginx.conf", "r") as file:
+        lines = file.readlines()
+
+    with open(f"{cwd}/nginx/nginx.conf", "w") as file:
+        for line in lines:
+            if line.strip().startswith("server_name"):
+                rex = re.compile(r"([\Sa-zA-Z1-9]+)\.([a-zA-Z1-9]+)\.([a-zA-Z1-9]+)")
+                domains = rex.findall(line)
+                for i in domains: 
+                    line=line.replace(f".{i[1]}.",f".{domain}.")
+                    line=line.replace("nextcloud.",nextcloud_subdomain+".")
+                # line = re.sub(r'server_name\s+\S+;', f'server_name {domain};', line)
+            file.write(line)
+
+    with open(f"{cwd}/nextcloud/.env","r") as file:
+        lines = file.readlines()
+
+    with open(f"{cwd}/nextcloud/.env","w") as file:
+        for line in lines:
+            if line.strip().startswith("NEXTCLOUD_TRUSTED_DOMAINS"):
+
+                line = re.sub(r'NEXTCLOUD_TRUSTED_DOMAINS=.*',f'NEXTCLOUD_TRUSTED_DOMAINS={nextcloud_subdomain}.{domain}')
+            file.write(line)
+
+
+def set_upload_size(size:str):
+    cwd = os.getcwd()
+    files = ["/nextcloud/web/nginx.conf","/nginx/uploadsize.conf"]
+    for config_file in files:
+        with open(f"{cwd}{config_file}", "r") as file:
+            lines = file.readlines()
+
+        with open(f"{cwd}{config_file}", "w") as file:
+            for line in lines:
+                if line.strip().startswith("client_max_body_size"):
+                    line = re.sub(r'client_max_body_size\s+\S+;', f'client_max_body_size {size};', line)
+                file.write(line)
+
+if len(sys.argv) == 1:
+    parser.print_help()
+    sys.exit(0)
+
+if args.generate_certificates: generate_certificates(pass_certificate_arguments=args.pass_certificate_arguments)
+if args.default_env_files: default_env_files()
+if args.domain is not None: 
+    if args.nextcloud_subdomain is not None:
+        set_domain(domain=args.domain,nextcloud_subdomain=args.nextcloud_subdomain)
+    else:
+        set_domain(domain=args.domain)
+if args.upload_size is not None: set_upload_size(size=args.upload_size)
