@@ -112,7 +112,7 @@ Proje dizininde `/backup` klasörü oluşturulacak ve içerisinde yedeklemelere 
 
 # Kurulum Scripti
 
-bash```
+```bash
 ❯ ./setup --help
 usage: setup [-h] [-c] [--pass-certificate-arguments] [--default-env-files] [-d DOMAIN] [--upload-size UPLOAD_SIZE] [--nextcloud-subdomain NEXTCLOUD_SUBDOMAIN]
 
