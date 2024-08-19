@@ -140,7 +140,7 @@ if args.install_docker:
         remove_docker_engine()
     install_docker_engine()
 
-if args.pull_images:
+if args.pull_images and (not args.run_server):
     pull_images(args.no_gitea)
 
 if args.run_server:
