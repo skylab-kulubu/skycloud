@@ -8,13 +8,56 @@ import glob
 import sys
 
 parser = argparse.ArgumentParser(description="Homeserver setup util")
+parser.add_argument("--install-docker",action="store_true",help="Install docker engine.")
+parser.add_argument("--hard-installation",action="store_true",help="Remove docker engine before installation. Only RHEL&Debian based distros!")
 parser.add_argument("-c","--generate-certificates",action="store_true",help="Set this value if you want SSL certificates to be generated, set it to 'False' or leave it blank if you want to use test certificates.")
 parser.add_argument("--pass-certificate-arguments",action="store_true")
 parser.add_argument("--default-env-files",action="store_true",help="Set to 'True' if you want .env files to be created using standard instance files.")
 parser.add_argument("-d","--domain",type=str,help="Set Nginx nameserver",required=False)
 parser.add_argument("--upload-size",type=str,help="File upload size limit, 0 is unlimited. Example: 16G, 100M.",required=False)
 parser.add_argument("--nextcloud-subdomain",type=str,required=False,help="nextcloud.example.com --> replaces nextcloud to any subdomain string")
+parse.add_argument("-p","--pull-images",action="store_true",help="Pull docker images after configuration.")
+parse.add_argument("-r","--run-server",action="store_true",help="Start server")
+parse.add_argument("--no-gitea",action="store_true",help="Disables Gitea server installation and pull phases.")
 args= parser.parse_args()
+
+def check_pkg_manager():
+    managers=["apt","dnf","yum","zyper","pacman"]
+    for manager in managers:
+        try:
+            output=subprocess.check_output(["command","-v",manager],text=True)
+        except:
+            print(manager+"packate manager is not competible")
+    return output
+
+def remove_docker_engine():
+    pm = check_pkg_manager()
+    if "apt" in pm:
+        command = "for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done"
+        subprocess.run(command,shell=True)
+    if pm in ["dnf","yum"]:
+        command = "sudo dnf remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-selinux docker-engine-selinux docker-engine"
+        subprocess.run(command.shell=True)
+    
+
+def install_docker_engine():
+    installation_script_text=requests.get("https://get.docker.com").text
+    with open("/tmp/docker.sh","w") as file:
+        file.write(installation_script_text)
+    subprocess.run("sudo bash /tmp/docker.sh",shell=True)
+
+
+def pull_images(no_gitea:bool=False):
+    cwd=os.getcwd()
+    subprocess.run("docker compose pull",cwd=cwd,shell=True)
+    if not no_gitea:
+        subprocess.run("docker compose pull",cwd=cwd+"/gitea",shell=True)
+
+def run_server(no_gitea:bool=False):
+    cwd=os.getcwd()
+    subprocess.run("docker compose up -d",cwd=cwd,shell=True)
+    if not no_gitea:
+        subprocess.run("docker compose up -d",cwd=cwd+"gitea",shell=True)
 
 def generate_certificates(pass_certificate_arguments:bool):
     command = "bash ../gencert"
@@ -23,8 +66,6 @@ def generate_certificates(pass_certificate_arguments:bool):
     cwd = os.getcwd()
      
     subprocess.run(command,shell=True,cwd=f"{cwd}/certs")
-
-
 
 def default_env_files():
     cwd = os.getcwd()
@@ -83,10 +124,24 @@ if len(sys.argv) == 1:
     sys.exit(0)
 
 if args.generate_certificates: generate_certificates(pass_certificate_arguments=args.pass_certificate_arguments)
+
 if args.default_env_files: default_env_files()
+
 if args.domain is not None: 
     if args.nextcloud_subdomain is not None:
         set_domain(domain=args.domain,nextcloud_subdomain=args.nextcloud_subdomain)
     else:
         set_domain(domain=args.domain)
+
 if args.upload_size is not None: set_upload_size(size=args.upload_size)
+
+if args.install_docker:
+    if args.hard_installation:
+        remove_docker_engine()
+    install_docker_engine()
+
+if args.pull_images:
+    pull_images(args.no_gitea)
+
+if args.run_server:
+    run_server()
