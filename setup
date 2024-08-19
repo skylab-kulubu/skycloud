@@ -60,10 +60,15 @@ def run_server(no_gitea:bool=False):
         subprocess.run("docker compose up -d",cwd=cwd+"gitea",shell=True)
 
 def generate_certificates(pass_certificate_arguments:bool):
+    cwd = os.getcwd()
+
+    if not os.path.exists(cwd+"/certs"):
+        os.makedirs(cwd+"certs")
+
     command = "bash ../gencert"
+
     if pass_certificate_arguments:
         command = "yes NA |" + command
-    cwd = os.getcwd()
      
     subprocess.run(command,shell=True,cwd=f"{cwd}/certs")
 
