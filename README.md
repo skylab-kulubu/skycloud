@@ -102,13 +102,15 @@ Proje dizininde `/backup` klasörü oluşturulacak ve içerisinde yedeklemelere 
 # Kurulum Scripti
 
 ```bash
-❯ ./setup --help
-usage: setup [-h] [-c] [--pass-certificate-arguments] [--default-env-files] [-d DOMAIN] [--upload-size UPLOAD_SIZE] [--nextcloud-subdomain NEXTCLOUD_SUBDOMAIN]
+❯ ./setup -h
+usage: setup [-h] [--install-docker] [--hard-installation] [-c] [--pass-certificate-arguments] [--default-env-files] [-d DOMAIN] [--upload-size UPLOAD_SIZE] [--nextcloud-subdomain NEXTCLOUD_SUBDOMAIN] [-p] [-r] [--no-gitea]
 
 Homeserver setup util
 
 options:
   -h, --help            show this help message and exit
+  --install-docker      Install docker engine.
+  --hard-installation   Remove docker engine before installation. Only RHEL&Debian based distros!
   -c, --generate-certificates
                         Set this value if you want SSL certificates to be generated, set it to 'False' or leave it blank if you want to use test certificates.
   --pass-certificate-arguments
@@ -119,4 +121,7 @@ options:
                         File upload size limit, 0 is unlimited. Example: 16G, 100M.
   --nextcloud-subdomain NEXTCLOUD_SUBDOMAIN
                         nextcloud.example.com --> replaces nextcloud to any subdomain string
+  -p, --pull-images     Pull docker images after configuration.
+  -r, --run-server      Start server
+  --no-gitea            Disables Gitea server installation and pull phases.
 ```
