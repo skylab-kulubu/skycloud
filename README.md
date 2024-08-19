@@ -125,3 +125,15 @@ options:
   -r, --run-server      Start server
   --no-gitea            Disables Gitea server installation and pull phases.
 ```
+Hızlı başlangıç için;
+
+```bash
+./setup -c --pass-certificate-arguments --default-env-files -r
+```
+
+# Kurulum Sonrası
+Nextcloud içerisinde `Forms` ve `ONLYOFFICE` kullanımını aktifleştirmek için **Nextcloud'a giriş yaptıktan sonra** aşağıdaki komutu çalıştırın.
+
+```bash
+bash nextcloud/set_configuration.sh
+```
