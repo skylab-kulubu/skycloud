@@ -16,9 +16,9 @@ parser.add_argument("--default-env-files",action="store_true",help="Set to 'True
 parser.add_argument("-d","--domain",type=str,help="Set Nginx nameserver",required=False)
 parser.add_argument("--upload-size",type=str,help="File upload size limit, 0 is unlimited. Example: 16G, 100M.",required=False)
 parser.add_argument("--nextcloud-subdomain",type=str,required=False,help="nextcloud.example.com --> replaces nextcloud to any subdomain string")
-parse.add_argument("-p","--pull-images",action="store_true",help="Pull docker images after configuration.")
-parse.add_argument("-r","--run-server",action="store_true",help="Start server")
-parse.add_argument("--no-gitea",action="store_true",help="Disables Gitea server installation and pull phases.")
+parser.add_argument("-p","--pull-images",action="store_true",help="Pull docker images after configuration.")
+parser.add_argument("-r","--run-server",action="store_true",help="Start server")
+parser.add_argument("--no-gitea",action="store_true",help="Disables Gitea server installation and pull phases.")
 args= parser.parse_args()
 
 def check_pkg_manager():
