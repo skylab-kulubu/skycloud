@@ -71,7 +71,7 @@ def run_server(no_gitea: bool = False):
     cwd = os.getcwd()
     subprocess.run("docker compose up -d", cwd=cwd, shell=True)
     if not no_gitea:
-        subprocess.run("docker compose up -d", cwd=cwd+"gitea", shell=True)
+        subprocess.run("docker compose up -d", cwd=cwd+"/gitea", shell=True)
 
 
 def generate_certificates(pass_certificate_arguments: bool):
