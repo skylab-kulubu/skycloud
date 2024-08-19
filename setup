@@ -37,7 +37,7 @@ def remove_docker_engine():
         subprocess.run(command,shell=True)
     if pm in ["dnf","yum"]:
         command = "sudo dnf remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-selinux docker-engine-selinux docker-engine"
-        subprocess.run(command.shell=True)
+        subprocess.run(command,shell=True)
     
 
 def install_docker_engine():
