@@ -7,14 +7,14 @@ services:
       - db:/var/lib/mysql
     env_file: ./mariadb/.env
     networks:
-      homeserver-network:
+      skycloud-network:
         ipv4_address: 10.10.10.2
 
   redis:
     image: redis:alpine
     restart: always
     networks:
-      homeserver-network:
+      skycloud-network:
         ipv4_address: 10.10.10.30
 
   onlyoffice-document-server:
@@ -29,7 +29,7 @@ services:
       - document_data:/var/www/onlyoffice/Data
       - document_log:/var/log/onlyoffice
     networks:
-      homeserver-network:
+      skycloud-network:
         ipv4_address: 10.10.10.8
 
   nextcloud-fpm:
@@ -50,7 +50,7 @@ services:
       - db
       - redis
     networks:
-      homeserver-network:
+      skycloud-network:
         ipv4_address: 10.10.10.5
 
   nextcloud-web:
@@ -66,7 +66,7 @@ services:
     depends_on:
       - nextcloud-fpm
     networks:
-      homeserver-network:
+      skycloud-network:
         ipv4_address: 10.10.10.6
 
   nextcloud-cron:
@@ -80,7 +80,7 @@ services:
       - db
       - redis
     networks:
-      homeserver-network:
+      skycloud-network:
         ipv4_address: 10.10.10.7
  
   nginx:
@@ -91,14 +91,14 @@ services:
       - 443:443
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/uploadsize.conf:/etc/nginx/conf.d/uploadsize.conf
       - ./certs/mycert.key:/etc/nginx/mycert.key
       - ./certs/mycert.crt:/etc/nginx/mycert.crt
+      - ./nginx/conf.d/.:/etc/nginx/conf.d/.
     labels:
       com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
 
     networks:
-      homeserver-network:
+      skycloud-network:
         ipv4_address: 10.10.10.3
 
   stirling_pdf:
@@ -114,22 +114,12 @@ services:
       - INSTALL_BOOK_AND_ADVANCED_HTML_OPS=false
       - LANGS=en_GB
     networks:
-      homeserver-network:
+      skycloud-network:
         ipv4_address: 10.10.10.20
 
-  blog:
-    image: ghost:5-alpine
-    container_name: blog
-    restart: always
-    env_file: ./ghost/.env
-    volumes:
-      - ghost:/var/lib/ghost/content:rw
-    networks:
-      homeserver-network:
-        ipv4_address: 10.10.10.10
-
 networks:
-  homeserver-network:
+  skycloud-network:
+    name: skycloud-network
     ipam:
       config:
         - subnet: 10.10.10.0/24
@@ -138,8 +128,6 @@ volumes:
     name: "nextcloud"
   db:
     name: "db"
-  ghost:
-    name: "ghost"
   trainingData: 
     name: "stirling-pdf-trainingData"
   extraConfigs:

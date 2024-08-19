@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  gitea-server:
+    image: gitea/gitea:latest
+    container_name: gitea
+    env_file: ./gitea/.env
+    restart: always
+    volumes:
+      - gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "8081:3000"
+    depends_on:
+      - gitea-db
+    networks:
+      skycloud-network:
+  gitea-db:
+    image: mysql:latest
+    restart: always
+    env_file: ./mysql/.env
+    networks:
+      skycloud-network:
+        ipv4_address: 10.10.10.50
+
+networks:
+  skycloud-network:
+    external: true
+
+volumes:
+  gitea:
+    driver: local
+
