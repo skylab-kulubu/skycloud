@@ -103,14 +103,35 @@ Proje dizininde `/backup` klasörü oluşturulacak ve içerisinde yedeklemelere 
 
 ```bash
 ❯ ./setup -h
-usage: setup [-h] [--install-docker] [--hard-installation] [-c] [--pass-certificate-arguments] [--default-env-files] [-d DOMAIN] [--upload-size UPLOAD_SIZE] [--nextcloud-subdomain NEXTCLOUD_SUBDOMAIN] [-p] [-r] [--no-gitea]
+usage: setup [-h] {server,config,backup} ...
 
 Homeserver setup util
 
+positional arguments:
+  {server,config,backup}
+
 options:
   -h, --help            show this help message and exit
-  --install-docker      Install docker engine.
-  --hard-installation   Remove docker engine before installation. Only RHEL&Debian based distros!
+```
+
+```bash
+❯ ./setup server -h
+usage: setup server [-h] [-r] [--install-docker] [--hard-installation] [--no-gitea]
+
+options:
+  -h, --help           show this help message and exit
+  -r, --run-server     Start server
+  --install-docker     Install docker engine.
+  --hard-installation  Remove docker engine before installation. Only RHEL&Debian based distros!
+  --no-gitea           Disables Gitea server installation and pull phases.
+```
+
+```bash
+❯ ./setup config -h
+usage: setup config [-h] [-c] [--pass-certificate-arguments] [--default-env-files] [-d DOMAIN] [--upload-size UPLOAD_SIZE] [--nextcloud-subdomain NEXTCLOUD_SUBDOMAIN] [-p] [--no-gitea]
+
+options:
+  -h, --help            show this help message and exit
   -c, --generate-certificates
                         Set this value if you want SSL certificates to be generated, set it to 'False' or leave it blank if you want to use test certificates.
   --pass-certificate-arguments
@@ -122,13 +143,27 @@ options:
   --nextcloud-subdomain NEXTCLOUD_SUBDOMAIN
                         nextcloud.example.com --> replaces nextcloud to any subdomain string
   -p, --pull-images     Pull docker images after configuration.
-  -r, --run-server      Start server
   --no-gitea            Disables Gitea server installation and pull phases.
 ```
+```bash
+❯ ./setup backup -h
+usage: setup backup [-h] [-a] [-n] [-s] [-g] [-of] [--dest DEST]
+
+options:
+  -h, --help          show this help message and exit
+  -a, --all
+  -n, --nextcloud
+  -s, --stirling-pdf
+  -g, --gitea
+  -of, --only-office
+  --dest DEST         backup destination
+```
+
 Hızlı başlangıç için;
 
 ```bash
-./setup -c --pass-certificate-arguments --default-env-files -r
+./setup config -c --pass-certificate-arguments
+./setup server -r
 ```
 
 # Kurulum Sonrası
