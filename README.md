@@ -151,7 +151,7 @@ options:
 Hızlı başlangıç için;
 
 ```bash
-./setup config -c --pass-certificate-arguments
+./setup config -c --pass-certificate-arguments --default-env-files
 ./setup server -r
 ```
 
