@@ -40,7 +40,7 @@ Bunun için aşağıdaki komutu `gencert` klasörünün içerisinde çalıştır
 ```bash
 ❯ yes NA | bash ../gencert
 ```
-- [ ] SSL Sertifika otomasyonu eklenecek
+- [X] SSL Sertifika otomasyonu eklenecek
 
 > Not: bunun için `openssl` paketinin sisteminizde kurulu olması gereklidir.
 
@@ -87,17 +87,6 @@ NextCloud uygulamasına erişim sağladıktan sonra `nextcloud` klasörünün i�
 ```bash
 bash nextcloud/set_configuration.sh
 ```
-# Konteyner Volumelerini Dışa Aktarma
-```bash
-bash backup_volumes.sh <option>
-```
-Options:
-- nextcloud
-- db
-- ghost
-- stirling-pdf
-
-Proje dizininde `/backup` klasörü oluşturulacak ve içerisinde yedeklemelere ulaşabilirsiniz.
 
 # Kurulum Scripti
 
