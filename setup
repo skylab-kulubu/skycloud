@@ -9,8 +9,7 @@ import glob
 import sys
 
 parser = argparse.ArgumentParser(description="Homeserver setup util")
-subparsers = parser.add_subparsers(
-    description="server, backup, config", dest="command")
+subparsers = parser.add_subparsers(dest="command")
 
 server_parser = subparsers.add_parser('server')
 server_parser.add_argument("-r", "--run-server",
