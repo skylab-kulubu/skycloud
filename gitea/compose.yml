@@ -23,6 +23,8 @@ services:
     networks:
       skycloud-network:
         ipv4_address: 10.10.10.50
+    volumes:
+      - gitea-db:/var/lib/mysql
 
 networks:
   skycloud-network:
@@ -30,5 +32,7 @@ networks:
 
 volumes:
   gitea:
+    name: gitea
     driver: local
-
+  gitea-db:
+    name: gitea-db
