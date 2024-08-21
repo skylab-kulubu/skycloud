@@ -1,7 +1,7 @@
 # Skycloud
 
 <div align="center">
-<img src="https://img.shields.io/badge/Alpine_Linux-0D597F?style=for-the-badge&logo=alpine-linux&logoColor=white" \> <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"></img> <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"></img> </img> <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white"/> <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white"></img> <img src="https://img.shields.io/badge/redis-CC0000.svg?&style=for-the-badge&logo=redis&logoColor=white"\> <img src="https://img.shields.io/badge/Nextcloud-0082C9?style=for-the-badge&logo=Nextcloud&logoColor=white"></img> <img src="https://clovyr.app/assets/gitea-badge-kxnRnZw-.webp" width="28"> <img src="https://raw.githubusercontent.com/Stirling-Tools/Stirling-PDF/main/docs/stirling.png" width="30"/>
+<img src="https://img.shields.io/badge/Alpine_Linux-0D597F?style=for-the-badge&logo=alpine-linux&logoColor=white" \> <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"></img> <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"></img> </img> <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white"/> <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white"></img> <img src="https://img.shields.io/badge/redis-CC0000.svg?&style=for-the-badge&logo=redis&logoColor=white"\> <img src="https://img.shields.io/badge/Nextcloud-0082C9?style=for-the-badge&logo=Nextcloud&logoColor=white"></img>  <img src="https://raw.githubusercontent.com/Stirling-Tools/Stirling-PDF/main/docs/stirling.png" width="30"/>
 </div>
 
 ## Nextcloud
@@ -105,19 +105,18 @@ options:
 
 ```bash
 ❯ ./setup server -h
-usage: setup server [-h] [-r] [--install-docker] [--hard-installation] [--no-gitea]
+usage: setup server [-h] [-r] [--install-docker] [--hard-installation] 
 
 options:
   -h, --help           show this help message and exit
   -r, --run-server     Start server
   --install-docker     Install docker engine.
   --hard-installation  Remove docker engine before installation. Only RHEL&Debian based distros!
-  --no-gitea           Disables Gitea server installation and pull phases.
 ```
 
 ```bash
 ❯ ./setup config -h
-usage: setup config [-h] [-c] [--pass-certificate-arguments] [--default-env-files] [-d DOMAIN] [--upload-size UPLOAD_SIZE] [--nextcloud-subdomain NEXTCLOUD_SUBDOMAIN] [-p] [--no-gitea]
+usage: setup config [-h] [-c] [--pass-certificate-arguments] [--default-env-files] [-d DOMAIN] [--upload-size UPLOAD_SIZE] [--nextcloud-subdomain NEXTCLOUD_SUBDOMAIN] [-p] 
 
 options:
   -h, --help            show this help message and exit
@@ -132,7 +131,6 @@ options:
   --nextcloud-subdomain NEXTCLOUD_SUBDOMAIN
                         nextcloud.example.com --> replaces nextcloud to any subdomain string
   -p, --pull-images     Pull docker images after configuration.
-  --no-gitea            Disables Gitea server installation and pull phases.
 ```
 ```bash
 ❯ ./setup backup -h
@@ -143,7 +141,6 @@ options:
   -a, --all
   -n, --nextcloud
   -s, --stirling-pdf
-  -g, --gitea
   -of, --only-office
   --dest DEST         backup destination
 ```
