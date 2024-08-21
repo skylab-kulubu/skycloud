@@ -161,3 +161,19 @@ Nextcloud içerisinde `Forms` ve `ONLYOFFICE` kullanımını aktifleştirmek iç
 ```bash
 bash nextcloud/set_configuration.sh
 ```
+
+## Bilgisayarınız Test İçin Çalıştırmak İçin
+Yerel bilgisayarınızda Linux veya MacOs ise `/etc/hosts`, Windows ise `C:\Windows\System32\drivers\etc\hosts` dosyasını aşağıdak gibi düzenleyin.
+```bash
+# Loopback entries; do not change.
+# For historical reasons, localhost precedes localhost.localdomain:
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+# See hosts(5) for proper format and other examples:
+# 192.168.1.10 foo.example.org foo
+# 192.168.1.13 bar.example.org bar
+#
+
+#192.168.122.51 nextcloud.skylab.com blog.skylab.com stirling-pdf.skylab.com git.skylab.com 
+127.0.0.1  nextcloud.skylab.com stirling-pdf.skylab.com 
+```
