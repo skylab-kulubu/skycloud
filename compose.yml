@@ -8,14 +8,12 @@ services:
     env_file: ./mariadb/.env
     networks:
       skycloud-network:
-        ipv4_address: 10.10.10.2
 
   redis:
     image: redis:alpine
     restart: always
     networks:
       skycloud-network:
-        ipv4_address: 10.10.10.30
 
   onlyoffice-document-server:
     container_name: onlyoffice-document-server
@@ -30,7 +28,6 @@ services:
       - document_log:/var/log/onlyoffice
     networks:
       skycloud-network:
-        ipv4_address: 10.10.10.8
 
   nextcloud-fpm:
     image: nextcloud:fpm-alpine
@@ -51,7 +48,6 @@ services:
       - redis
     networks:
       skycloud-network:
-        ipv4_address: 10.10.10.5
 
   nextcloud-web:
     build: ./nextcloud/web
@@ -67,7 +63,6 @@ services:
       - nextcloud-fpm
     networks:
       skycloud-network:
-        ipv4_address: 10.10.10.6
 
   nextcloud-cron:
     image: nextcloud:fpm-alpine
@@ -81,7 +76,6 @@ services:
       - redis
     networks:
       skycloud-network:
-        ipv4_address: 10.10.10.7
  
   nginx:
     image: nginx:alpine
@@ -100,11 +94,10 @@ services:
 
     networks:
       skycloud-network:
-        ipv4_address: 10.10.10.3
 
-  stirling_pdf:
+  stirling-pdf:
     image: frooodle/s-pdf:latest
-    container_name: stirling_pdf
+    container_name: stirling-pdf
     volumes:
       - trainingData:/usr/share/tessdata 
       - extraConfigs:/configs
@@ -116,8 +109,6 @@ services:
       - LANGS=en_GB
     networks:
       skycloud-network:
-        ipv4_address: 10.10.10.20
-
 networks:
   skycloud-network:
     name: skycloud-network
