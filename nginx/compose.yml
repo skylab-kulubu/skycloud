@@ -1,16 +1,18 @@
-nginx:
-    image: nginx:alpine
-    container_name: nginx
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./mycert.key:/etc/nginx/mycert.key
-      - ./mycert.crt:/etc/nginx/mycert.crt
-      - ./conf.d/.:/etc/nginx/conf.d/.
-      - ./variables.conf:/etc/nginx/templates/variables.conf.template:ro
-    labels:
-      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
-    environment:
-      EXTERNAL_IP: "x.x.x.x"
+services:
+
+  nginx:
+      image: nginx:alpine
+      container_name: nginx
+      restart: always
+      ports:
+        - 80:80
+        - 443:443
+      volumes:
+        - ./mycert.key:/etc/nginx/mycert.key
+        - ./mycert.crt:/etc/nginx/mycert.crt
+        - ./conf.d/.:/etc/nginx/conf.d/.
+        - ./variables.conf:/etc/nginx/templates/variables.conf.template:ro
+      labels:
+        com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+      environment:
+        EXTERNAL_IP: "x.x.x.x"
