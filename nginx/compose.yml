@@ -1,5 +1,9 @@
 services:
-
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
   nginx:
       image: nginx:alpine
       container_name: nginx
@@ -8,11 +12,14 @@ services:
         - 80:80
         - 443:443
       volumes:
-        - ./mycert.key:/etc/nginx/mycert.key
-        - ./mycert.crt:/etc/nginx/mycert.crt
+        # Self Signed
+        # - ./mycert.key:/etc/nginx/mycert.key
+        # - ./mycert.crt:/etc/nginx/mycert.crt
+        - ./certbot/www:/var/www/certbot/:ro
+        - ./certbot/conf/:/etc/nginx/ssl/:ro
         - ./conf.d/.:/etc/nginx/conf.d/.
         - ./variables.conf:/etc/nginx/templates/variables.conf.template:ro
       labels:
         com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
       environment:
-        EXTERNAL_IP: "x.x.x.x"
+        EXTERNAL_IP: "10.8.0.2"
