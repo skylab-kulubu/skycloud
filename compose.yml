@@ -53,6 +53,8 @@ services:
     build: ./nextcloud/web
     container_name: nextcloud-web
     restart: always
+    ports:
+      - 80:80
     volumes:
       - nextcloud:/var/www/html:z,ro
     environment:
@@ -77,26 +79,12 @@ services:
     networks:
       skycloud-network:
  
-  nginx:
-    image: nginx:alpine
-    container_name: nginx
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./certs/mycert.key:/etc/nginx/mycert.key
-      - ./certs/mycert.crt:/etc/nginx/mycert.crt
-      - ./nginx/conf.d/.:/etc/nginx/conf.d/.
-    labels:
-      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
-
-    networks:
-      skycloud-network:
 
   stirling-pdf:
     image: frooodle/s-pdf:latest
     container_name: stirling-pdf
+    ports:
+      - "8080:8080"
     volumes:
       - trainingData:/usr/share/tessdata 
       - extraConfigs:/configs
