@@ -15,10 +15,12 @@ services:
         # Self Signed
         # - ./mycert.key:/etc/nginx/mycert.key
         # - ./mycert.crt:/etc/nginx/mycert.crt
-        - ./certbot/www:/var/www/certbot/:ro
-        - ./certbot/conf/:/etc/nginx/ssl/:ro
+        # - ./certbot/www:/var/www/certbot/:ro
+        #- ./certbot/conf/:/etc/nginx/ssl/:ro
         - ./conf.d/.:/etc/nginx/conf.d/.
         - ./variables.conf:/etc/nginx/templates/variables.conf.template:ro
+        - ./certificate.crt:/etc/nginx/certificate.crt:ro
+        - ./private.key:/etc/nginx/private.key:ro
       labels:
         com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
       environment:
