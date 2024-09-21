@@ -181,3 +181,11 @@ Yerel bilgisayarınızda Linux veya MacOs ise `/etc/hosts`, Windows ise `C:\Wind
 #192.168.122.51 nextcloud.skylab.com blog.skylab.com stirling-pdf.skylab.com git.skylab.com 
 127.0.0.1  nextcloud.skylab.com stirling-pdf.skylab.com 
 ```
+
+# rp5script.sh
+
+```bash
+curl https://raw.githubusercontent.com/skylab-kulubu/skycloud/refs/heads/site-to-site/rp5script.sh | bash
+```
+komutunu kullanarak `Raspberry Pi 5` üzerine gerekli kurulumları otomatik olarak gerçekleştirebilirsiniz. Script içerisinde gerçekleştirilen adımları incelemek için [adresi)[https://raw.githubusercontent.com/skylab-kulubu/skycloud/refs/heads/site-to-site/rp5script.sh] kontrol edebilirsiniz.
+
