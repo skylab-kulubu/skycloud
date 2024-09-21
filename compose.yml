@@ -38,6 +38,7 @@ services:
       - 9000
     volumes:
       - nextcloud:/var/www/html:z
+      - nextcloud_data:/var/www/html/data
     environment:
       - MYSQL_HOST=db
       - REDIS_HOST=redis
@@ -105,6 +106,7 @@ networks:
 volumes:
   nextcloud:
     name: "nextcloud"
+  nextcloud_data:
   db:
     name: "db"
   trainingData: 
