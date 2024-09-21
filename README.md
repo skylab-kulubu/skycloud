@@ -7,6 +7,7 @@
 ## Nextcloud
 Gerekli ayarları yapmak için [.env](https://github.com/farukerdem34/homeserver/blob/alpine/nextcloud/example.env) dosyasını oluşturmalısınız.
 Örnek bir `nextcloud/.env` dosyası
+
 ```
 MYSQL_DATABASE=nextcloud
 MYSQL_USER=nextcloud
@@ -15,7 +16,9 @@ MYSQL_HOST=db
 NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.skylab.com cloud.skylab.com
 NEXTCLOUD_ADMIN_USER=nextcloud
 NEXTCLOUD_ADMIN_PASSWORD=nextcloud
+OVERWRITEPROTOCOL=https
 ```
+
 ### Dosya Yükleme Boyutu Sınırı
 [./nextcloud/web/nginx.conf](https://github.com/farukerdem34/homeserver/blob/alpine/nextcloud/web/nginx.conf) 62. satırdaki `client_max_body_size` değişkenini düzenleyerek dosya yükleme boyutun ayarlayabilirisiniz.
 
@@ -47,6 +50,10 @@ Bunun için aşağıdaki komutu `gencert` klasörünün içerisinde çalıştır
 # Canlıya Almadan Önce!
 nginx/nginx.conf dosyasındaki `skylab` değerlerini alan adı ile değiştirin!
 
+## SSL Sertifikaları!
+`nginx/certificate.crt` ve `nginx/private.key` değerlerini `nginx` klasöründe bulundarmalısınız! Kullanacağınız SSL sertifika otoritesine göre dosyaları değiştirmeniz gerekebilir, sertifikarlı edinme işleminde `Nginx` seçeneğini varsa kullanım ve `nginx/conf.d` klasöründeki dosyalarda sertifia dosyalarının isimlerini düzenleyin.
+
+
 # Kurulum
 Sisteminizde `Docker` kurulu olmalı, eğer önceden `Docker` kurulu bir sisteminiz varsa ve sisteminizin paket yöneticisi aracılığıyla indirmişseniz `Docker`ı sisteminizden öncelikle silin ve aşağıdaki adımları izleyerek sisteminize `Docker` yükleyin.
 Ubuntu
@@ -75,17 +82,17 @@ curl -fsSL https://get.docker.com -o get-docker.sh && sudo bash get-docker.sh
 ```
 `Docker` kurulumu gerçekleştikten sonra
 ```bash
-git clone https://github.com/farukerdem34/homeserver.git
+git clone https://github.com/farukerdem34/homeserver.git -b site-to-site
 ```
 ```bash
-cd homeserver
+cd skycloud
 ```
 ```bash
 docker compose up -d
 ```
 NextCloud uygulamasına erişim sağladıktan sonra `nextcloud` klasörünün içerisinde bulunan `set_configuration.sh` dosyasını aşağıdaki komut ile çalıştırın.
 ```bash
-bash nextcloud/set_configuration.sh
+sudo bash nextcloud/set_configuration.sh
 ```
 
 # Kurulum Scripti
@@ -156,7 +163,7 @@ Hızlı başlangıç için;
 Nextcloud içerisinde `Forms` ve `ONLYOFFICE` kullanımını aktifleştirmek için **Nextcloud'a giriş yaptıktan sonra** aşağıdaki komutu çalıştırın.
 
 ```bash
-bash nextcloud/set_configuration.sh
+sudo bash nextcloud/set_configuration.sh
 ```
 
 ## Bilgisayarınız Test İçin Çalıştırmak İçin
