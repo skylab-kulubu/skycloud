@@ -187,12 +187,12 @@ Yerel bilgisayarınızda Linux veya MacOs ise `/etc/hosts`, Windows ise `C:\Wind
 ```bash
 curl https://raw.githubusercontent.com/skylab-kulubu/skycloud/refs/heads/site-to-site/rp5script.sh | bash
 ```
-komutunu kullanarak `Raspberry Pi 5` üzerine gerekli kurulumları otomatik olarak gerçekleştirebilirsiniz. Script içerisinde gerçekleştirilen adımları incelemek için (adresi)[https://raw.githubusercontent.com/skylab-kulubu/skycloud/refs/heads/site-to-site/rp5script.sh] kontrol edebilirsiniz.
+komutunu kullanarak `Raspberry Pi 5` üzerine gerekli kurulumları otomatik olarak gerçekleştirebilirsiniz. Script içerisinde gerçekleştirilen adımları incelemek için [adresi](https://raw.githubusercontent.com/skylab-kulubu/skycloud/refs/heads/site-to-site/rp5script.sh) kontrol edebilirsiniz.
 
-# firewall.sh
+# [firewall.sh](https://raw.githubusercontent.com/skylab-kulubu/skycloud/refs/heads/site-to-site/firewall.sh)
 
 ```
 curl https://raw.githubusercontent.com/skylab-kulubu/skycloud/refs/heads/site-to-site/firewall.sh | bash
 ```
-Güvenlik duvarı kurulumunu VPN bağltısı kurduktan sonra çalıştırın! Aksi taktirde `SSH` bağlantısı kuramazsınız! Güvenlik duvarı aktif olduktan sonra `SSH` bağlantısı yalnızca VPN üzerinden sağlanabilir!
+Güvenlik duvarı kurulumunu VPN bağltısı kurduktan sonra çalıştırın! Aksi taktirde `SSH` bağlantısı kuramazsınız! Güvenlik duvarı aktif olduktan sonra `SSH` bağlantısı yalnızca VPN üzerinden sağlanabilir! 
 
