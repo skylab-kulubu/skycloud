@@ -24,7 +24,7 @@ OVERWRITEPROTOCOL=https
 
 Nextcloud hakkında daha fazla ortam değişkeni [için](https://hub.docker.com/_/nextcloud#docker-secrets)
 
-## MySQL
+## MariaDB
 Gerekli ayarları yapmak için [.env](https://github.com/farukerdem34/homeserver/blob/alpine/mysql/example.env) dosyasını oluşturmalısınız.
 Örnek bir `mysql/.env` dosyası
 ```
