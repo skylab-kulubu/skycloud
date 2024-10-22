@@ -12,7 +12,7 @@ MYSQL_DATABASE=nextcloud
 MYSQL_USER=nextcloud
 MYSQL_PASSWORD=nextcloud
 MYSQL_HOST=db
-NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.skylab.com cloud.skylab.com
+NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.yildizskylab.com cloud.yildizskylab.com
 NEXTCLOUD_ADMIN_USER=nextcloud
 NEXTCLOUD_ADMIN_PASSWORD=nextcloud
 ```
@@ -171,6 +171,6 @@ Yerel bilgisayarınızda Linux veya MacOs ise `/etc/hosts`, Windows ise `C:\Wind
 # 192.168.1.13 bar.example.org bar
 #
 
-#192.168.122.51 nextcloud.skylab.com blog.skylab.com stirling-pdf.skylab.com git.skylab.com 
-127.0.0.1  nextcloud.skylab.com stirling-pdf.skylab.com 
+#192.168.122.51 nextcloud.yildizskylab.com blog.yildizskylab.com stirling-pdf.yildizskylab.com git.yildizskylab.com 
+127.0.0.1  nextcloud.yildizskylab.com stirling-pdf.yildizskylab.com 
 ```
