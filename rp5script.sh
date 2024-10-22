@@ -9,7 +9,7 @@ bash /tmp/install_docker.sh > /dev/null 2>&1
 rm /tmp/install_docker.sh
 
 sudo mkdir /var/www/
-sudo chown ubuntu:ubuntu -R /var/www
+sudo chown $USER:$USER -R /var/www
 cd /var/www
 
 # DOCKER
