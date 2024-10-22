@@ -59,7 +59,7 @@ services:
     volumes:
       - nextcloud:/var/www/html:z,ro
     environment:
-      - VIRTUAL_HOST=nextcloud.skylab.com
+      - VIRTUAL_HOST=nextcloud.yildizyildizskylab.com
       - LETSENCRYPT_HOST=
       - LETSENCRYPT_EMAIL=
     depends_on:
