@@ -36,22 +36,7 @@ MYSQL_PASSWORD=nextcloud
 MySQL hakkında daha fazla ortam değişken [için](https://dev.mysql.com/doc/refman/5.7/en/environment-variables.html)
 
 ## Nginx
-- [X] HTTPS eklenecek
-`HTTPS` kullanımı için `gencert` scriptini çalıştırarak sertifikaları `certs` klasörüne eklemelisiniz.
-
-Bunun için aşağıdaki komutu `gencert` klasörünün içerisinde çalıştırmanız yeterli olacaktır.
-```bash
-❯ yes NA | bash ../gencert
-```
-- [X] SSL Sertifika otomasyonu eklenecek
-
-> Not: bunun için `openssl` paketinin sisteminizde kurulu olması gereklidir.
-
-# Canlıya Almadan Önce!
-nginx/nginx.conf dosyasındaki `skylab` değerlerini alan adı ile değiştirin!
-
-## SSL Sertifikaları!
-`nginx/certificate.crt` ve `nginx/private.key` değerlerini `nginx` klasöründe bulundarmalısınız! Kullanacağınız SSL sertifika otoritesine göre dosyaları değiştirmeniz gerekebilir, sertifikarlı edinme işleminde `Nginx` seçeneğini varsa kullanım ve `nginx/conf.d` klasöründeki dosyalarda sertifia dosyalarının isimlerini düzenleyin.
+`nginx` klasöründe bulunan Docker compose dosyasını `site-to-site` VPN sunucusunda düzenlenmiş şekilde çalıştırmalısınız.
 
 
 # Kurulum
