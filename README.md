@@ -112,7 +112,7 @@ options:
 
 ```bash
 ❯ ./setup server -h
-usage: setup server [-h] [-r] [--install-docker] [--hard-installation] 
+usage: setup server [-h] [-r] [--install-docker] [--hard-installation]
 
 options:
   -h, --help           show this help message and exit
@@ -123,14 +123,12 @@ options:
 
 ```bash
 ❯ ./setup config -h
-usage: setup config [-h] [-c] [--pass-certificate-arguments] [--default-env-files] [-d DOMAIN] [--upload-size UPLOAD_SIZE] [--nextcloud-subdomain NEXTCLOUD_SUBDOMAIN] [-p] 
+usage: setup config [-h] [--default-env-files] [--random-env-passwds] [-d DOMAIN] [--upload-size UPLOAD_SIZE] [--nextcloud-subdomain NEXTCLOUD_SUBDOMAIN] [-p]
 
 options:
   -h, --help            show this help message and exit
-  -c, --generate-certificates
-                        Set this value if you want SSL certificates to be generated, set it to 'False' or leave it blank if you want to use test certificates.
-  --pass-certificate-arguments
   --default-env-files   Set to 'True' if you want .env files to be created using standard instance files.
+  --random-env-passwds  Sets random passwd values.
   -d DOMAIN, --domain DOMAIN
                         Set Nginx nameserver
   --upload-size UPLOAD_SIZE
