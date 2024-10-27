@@ -94,20 +94,6 @@ services:
     networks:
       skycloud-network:
 
-  stirling-pdf:
-    image: frooodle/s-pdf:latest
-    container_name: stirling-pdf
-    volumes:
-      - trainingData:/usr/share/tessdata 
-      - extraConfigs:/configs
-#      - ./customFiles:/customFiles/
-#      - ./logs:/logs/
-    environment:
-      - DOCKER_ENABLE_SECURITY=false
-      - INSTALL_BOOK_AND_ADVANCED_HTML_OPS=false
-      - LANGS=en_GB
-    networks:
-      skycloud-network:
 networks:
   skycloud-network:
     name: skycloud-network
@@ -119,10 +105,6 @@ volumes:
     name: "nextcloud"
   db:
     name: "db"
-  trainingData: 
-    name: "stirling-pdf-trainingData"
-  extraConfigs:
-    name: "stirling-pdf-extraConfig"
   document_data:
     name: "onlyoffice-document-data"
   document_log:
