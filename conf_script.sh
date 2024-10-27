@@ -17,8 +17,6 @@ then
         sed -i.bak "s/nextcloud\..*\.com/$2/s" nginx/nginx.conf
     elif [[ $2 == 'ghost'  ]];then
         sed -i.bak "s/blog\..*\.com/$2/s" nginx/nginx.conf
-    elif [[ $2 == 'stirling-pdf'  ]];then
-        sed -i.bak "s/stirling-pdf\..*\.com/$2/s" nginx/nginx.conf
     else
         sed -i.bak "s/skylab\.com/$2.com/s"
     fi

@@ -46,15 +46,13 @@ backup_parser = subparsers.add_parser('backup')
 
 backup_parser.add_argument("-a","--all",action="store_true")
 backup_parser.add_argument("-n","--nextcloud",action="store_true")
-backup_parser.add_argument("-s","--stirling-pdf",action="store_true")
 backup_parser.add_argument("-of","--only-office",action="store_true")
 backup_parser.add_argument('--dest',help="backup destination",required=False,default=None)
 
 args = parser.parse_args()
 
-def backup(full_backup:bool=False,nextcloud:bool=False,stirling_pdf:bool=False,only_office:bool=False,destination=None):
+def backup(full_backup:bool=False,nextcloud:bool=False,only_office:bool=False,destination=None):
     volumes = {
-        "stirling-pdf":['stirling-pdf-extraConfig','stirling-pdf-trainingData'],
         "nextcloud":["nextcloud","db"],
         "only-office":["onlyoffice-document-log","onlyoffice-document-data"]
             }
@@ -81,9 +79,7 @@ def backup(full_backup:bool=False,nextcloud:bool=False,stirling_pdf:bool=False,o
         for volume in volumes["nextcloud"]:
             backup_script(destination,volume)
 
-    if stirling_pdf:
-        for volume in volumes["stirling-pdf"]:
-            backup_script(destination,volume)
+    
     if only_office:
         for volume in volumes["only-office"]:
             backup_script(destination,volume)
@@ -244,7 +240,7 @@ MYSQL_PASSWORD={db_passwd}
 MYSQL_USER=nextcloud
 MYSQL_PASSWORD={db_passwd}
 MYSQL_HOST=db
-NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.yildizskylab.com cloud.yildizskylab.com
+NEXTCLOUD_TRUSTED_DOMAINS=skycloud.yildizskylab.com cloud.yildizskylab.com
 NEXTCLOUD_ADMIN_USER=nextcloud
 NEXTCLOUD_ADMIN_PASSWORD={nextcloud_admin_passwd}
 OVERWRITEPROTOCOL=https
@@ -303,4 +299,4 @@ if args.command=="backup":
     if len(sys.argv) == 2:
         backup_parser.print_help()
         sys.exit(0)   
-    backup(full_backup=args.all,nextcloud=args.nextcloud,stirling_pdf=args.stirling_pdf,only_office=args.only_office,destination=args.dest)
+    backup(full_backup=args.all,nextcloud=args.nextcloud,only_office=args.only_office,destination=args.dest)

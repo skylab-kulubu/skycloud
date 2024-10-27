@@ -1,7 +1,7 @@
 # Skycloud
 
 <div align="center">
-<img src="https://img.shields.io/badge/Alpine_Linux-0D597F?style=for-the-badge&logo=alpine-linux&logoColor=white" \> <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"></img> <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"></img> </img> <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white"/> <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white"></img> <img src="https://img.shields.io/badge/redis-CC0000.svg?&style=for-the-badge&logo=redis&logoColor=white"\> <img src="https://img.shields.io/badge/Nextcloud-0082C9?style=for-the-badge&logo=Nextcloud&logoColor=white"></img>  <img src="https://raw.githubusercontent.com/Stirling-Tools/Stirling-PDF/main/docs/stirling.png" width="30"/>
+<img src="https://img.shields.io/badge/Alpine_Linux-0D597F?style=for-the-badge&logo=alpine-linux&logoColor=white" \> <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"></img> <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"></img> </img> <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white"/> <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white"></img> <img src="https://img.shields.io/badge/redis-CC0000.svg?&style=for-the-badge&logo=redis&logoColor=white"\> <img src="https://img.shields.io/badge/Nextcloud-0082C9?style=for-the-badge&logo=Nextcloud&logoColor=white"></img> 
 </div>
 
 ## Nextcloud
@@ -12,7 +12,7 @@ MYSQL_DATABASE=nextcloud
 MYSQL_USER=nextcloud
 MYSQL_PASSWORD=nextcloud
 MYSQL_HOST=db
-NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.yildizskylab.com cloud.yildizskylab.com
+NEXTCLOUD_TRUSTED_DOMAINS=skycloud.yildizskylab.com cloud.yildizskylab.com
 NEXTCLOUD_ADMIN_USER=nextcloud
 NEXTCLOUD_ADMIN_PASSWORD=nextcloud
 ```
@@ -140,7 +140,6 @@ options:
   -h, --help          show this help message and exit
   -a, --all
   -n, --nextcloud
-  -s, --stirling-pdf
   -of, --only-office
   --dest DEST         backup destination
 ```
@@ -170,7 +169,5 @@ Yerel bilgisayarınızda Linux veya MacOs ise `/etc/hosts`, Windows ise `C:\Wind
 # 192.168.1.10 foo.example.org foo
 # 192.168.1.13 bar.example.org bar
 #
-
-#192.168.122.51 nextcloud.yildizskylab.com blog.yildizskylab.com stirling-pdf.yildizskylab.com git.yildizskylab.com 
-127.0.0.1  nextcloud.yildizskylab.com stirling-pdf.yildizskylab.com 
+127.0.0.1  skycloud.yildizskylab.com
 ```
