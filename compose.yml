@@ -53,6 +53,8 @@ services:
     build: ./nextcloud/web
     container_name: nextcloud-web
     restart: always
+    ports:
+      - "8911:8911"
     volumes:
       - nextcloud:/var/www/html:z,ro
     environment:
