@@ -232,22 +232,22 @@ def random_env_passwds():
     with open("./mariadb/.env","w") as file:
 
         config = f"""MARIADB_ROOT_PASSWORD={db_root_passwd}
-                     MYSQL_DATABASE=nextcloud
-                     MYSQL_USER=nextcloud
-                     MYSQL_PASSWORD={db_passwd}
+MYSQL_DATABASE=nextcloud
+MYSQL_USER=nextcloud
+MYSQL_PASSWORD={db_passwd}
                     """
         file.write(config)
 
     # Nextcloud
     with open("./nextcloud/.env","w") as file:
         config = f"""MYSQL_DATABASE=nextcloud
-                     MYSQL_USER=nextcloud
-                     MYSQL_PASSWORD={db_passwd}
-                     MYSQL_HOST=db
-                     NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.yildizskylab.com cloud.yildizskylab.com
-                     NEXTCLOUD_ADMIN_USER=nextcloud
-                     NEXTCLOUD_ADMIN_PASSWORD={nextcloud_admin_passwd}
-                     OVERWRITEPROTOCOL=https
+MYSQL_USER=nextcloud
+MYSQL_PASSWORD={db_passwd}
+MYSQL_HOST=db
+NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.yildizskylab.com cloud.yildizskylab.com
+NEXTCLOUD_ADMIN_USER=nextcloud
+NEXTCLOUD_ADMIN_PASSWORD={nextcloud_admin_passwd}
+OVERWRITEPROTOCOL=https
                     """
         file.write(config)
     
