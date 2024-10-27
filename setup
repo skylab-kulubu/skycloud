@@ -51,7 +51,6 @@ backup_parser.add_argument("-of","--only-office",action="store_true")
 backup_parser.add_argument('--dest',help="backup destination",required=False,default=None)
 
 args = parser.parse_args()
-print(args) 
 
 def backup(full_backup:bool=False,nextcloud:bool=False,stirling_pdf:bool=False,only_office:bool=False,destination=None):
     volumes = {
