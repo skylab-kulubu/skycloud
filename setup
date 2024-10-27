@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import time
+import string
+import random
 import requests
 import argparse
 import os
@@ -26,6 +28,8 @@ config_parser.add_argument("-c", "--generate-certificates", action="store_true",
                            help="Set this value if you want SSL certificates to be generated, set it to 'False' or leave it blank if you want to use test certificates.")
 
 config_parser.add_argument("--pass-certificate-arguments", action="store_true")
+
+config_parser.add_argument("--random-env-passwds",action="store_true",help="Sets random passwd values.")
 
 config_parser.add_argument("--default-env-files", action="store_true",
                            help="Set to 'True' if you want .env files to be created using standard instance files.")
@@ -192,6 +196,66 @@ def set_upload_size(size: str):
                                   f'client_max_body_size {size};', line)
                 file.write(line)
 
+def generate_password(length=12):
+    if length < 4:
+        raise ValueError("Password lenght must longer than 4 char..")
+
+    # Büyük harf, küçük harf ve rakam karakterleri
+    upper = string.ascii_uppercase
+    lower = string.ascii_lowercase
+    digits = string.digits
+    
+    # Şifrenin her bir bölümünden en az bir karakter ekleyelim
+    password = [
+        random.choice(upper),
+        random.choice(lower),
+        random.choice(digits)
+    ]
+    
+    # Geri kalan karakterleri rastgele seçelim
+    all_characters = upper + lower + digits
+    password += random.choices(all_characters, k=length - 4)
+    
+    # Karakterleri karıştır
+    random.shuffle(password)
+    
+    # Listeyi string'e çevir
+    return ''.join(password)
+
+def random_env_passwds():
+    # MariaDB
+    db_root_passwd=generate_password()
+    db_passwd=generate_password()
+    nextcloud_admin_passwd=generate_password()
+    jwt_secret=generate_password()
+
+    # MariaDB
+    with open("./mariadb/.env","w") as file:
+
+        config = f"""MARIADB_ROOT_PASSWORD={db_root_passwd}
+                     MYSQL_DATABASE=nextcloud
+                     MYSQL_USER=nextcloud
+                     MYSQL_PASSWORD={db_passwd}
+                    """
+        file.write(config)
+
+    # Nextcloud
+    with open("./nextcloud/.env","w") as file:
+        config = f"""MYSQL_DATABASE=nextcloud
+                     MYSQL_USER=nextcloud
+                     MYSQL_PASSWORD={db_passwd}
+                     MYSQL_HOST=db
+                     NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.yildizskylab.com cloud.yildizskylab.com
+                     NEXTCLOUD_ADMIN_USER=nextcloud
+                     NEXTCLOUD_ADMIN_PASSWORD={nextcloud_admin_passwd}
+                     OVERWRITEPROTOCOL=https
+                    """
+        file.write(config)
+    
+    # Only Office
+    with open("./nextcloud/only-office/.env","w") as file:
+        config = f"JWT_SECRET={jwt_secret}"
+        file.write(config)
 
 if len(sys.argv) == 1:
     parser.print_help()
@@ -206,8 +270,10 @@ if args.command=="config":
         generate_certificates(
             pass_certificate_arguments=args.pass_certificate_arguments)
 
-    if args.default_env_files:
+    if args.default_env_files and not args.random_env_passwds:
         default_env_files()
+    if args.random_env_passwds:
+        random_env_passwds()
 
     if args.domain is not None:
         if args.nextcloud_subdomain is not None:
