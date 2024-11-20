@@ -38,6 +38,9 @@ services:
       - 9000
     volumes:
       - nextcloud:/var/www/html:z
+      - nextcloud-data:/var/www/html/data
+      - nextcloud-config:/var/www/html/config
+      - nextcloud-custom_apps:/var/www/html/custom_apps
     environment:
       - MYSQL_HOST=db
       - REDIS_HOST=redis
@@ -104,11 +107,11 @@ networks:
         - subnet: 10.10.10.0/24
 volumes:
   nextcloud:
-    name: "nextcloud"
+  nextcloud-data:
+  nextcloud-config:
+  nextcloud-custom_apps:
   db:
-    name: "db"
   document_data:
-    name: "onlyoffice-document-data"
   document_log:
-    name: "onlyoffice-document-log"
+  
 
