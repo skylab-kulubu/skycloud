@@ -8,6 +8,9 @@
 
 [![Image](https://i.hizliresim.com/1nviupi.jpg)](https://hizliresim.com/1nviupi)
 
+## Collabora Kurulum
+`Apps` bölümünden `Hub Bundle` paketini indirmelisiniz. Ayarlar sekmesinden `Nextcloud Office` bölümüne girip gerekli ayarlamaları yapınız.
+
 ## Nextcloud
 Gerekli ayarları yapmak için [.env](https://github.com/farukerdem34/homeserver/blob/alpine/nextcloud/example.env) dosyasını oluşturmalısınız.
 Örnek bir `nextcloud/.env` dosyası
@@ -16,7 +19,7 @@ MYSQL_DATABASE=nextcloud
 MYSQL_USER=nextcloud
 MYSQL_PASSWORD=nextcloud
 MYSQL_HOST=db
-NEXTCLOUD_TRUSTED_DOMAINS=skycloud.yildizskylab.com cloud.yildizskylab.com
+NEXTCLOUD_TRUSTED_DOMAINS=cloud.yildizskylab.com cloud.yildizskylab.com
 NEXTCLOUD_ADMIN_USER=nextcloud
 NEXTCLOUD_ADMIN_PASSWORD=nextcloud
 ```
@@ -173,5 +176,5 @@ Yerel bilgisayarınızda Linux veya MacOs ise `/etc/hosts`, Windows ise `C:\Wind
 # 192.168.1.10 foo.example.org foo
 # 192.168.1.13 bar.example.org bar
 #
-127.0.0.1  skycloud.yildizskylab.com
+127.0.0.1  cloud.yildizskylab.com
 ```

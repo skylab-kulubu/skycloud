@@ -5,83 +5,60 @@ services:
     restart: always
     volumes:
       - db:/var/lib/mysql
+      - "/etc/localtime:/etc/localtime:ro"
     env_file: ./mariadb/.env
     networks:
       skycloud-network:
+    expose:
+      - 3306
 
   redis:
     image: redis:alpine
     restart: always
     networks:
-      skycloud-network:
-
-  onlyoffice-document-server:
-    container_name: onlyoffice-document-server
-    image: onlyoffice/documentserver:latest
-    restart: always
-    env_file: ./nextcloud/only-office/.env
+      - skycloud-network
     expose:
-      - '80'
-      - '443'
+      - 6379
     volumes:
-      - document_data:/var/www/onlyoffice/Data
-      - document_log:/var/log/onlyoffice
-    networks:
-      skycloud-network:
+      - "/etc/localtime:/etc/localtime:ro"
 
-  nextcloud-fpm:
-    image: nextcloud:fpm-alpine
-    container_name: nextcloud-fpm
+  nc:
+    image: nextcloud
     restart: always
     expose:
       - 80
       - 9000
-    volumes:
-      - nextcloud:/var/www/html:z
-      - nextcloud-data:/var/www/html/data
-      - nextcloud-config:/var/www/html/config
-      - nextcloud-custom_apps:/var/www/html/custom_apps
     environment:
       - MYSQL_HOST=db
       - REDIS_HOST=redis
     env_file:
       - ./nextcloud/.env
-    depends_on:
-      - db
-      - redis
+    # ports:
+    #   - 80:80
+    volumes:
+      - nextcloud:/var/www/html
+      - "/etc/localtime:/etc/localtime:ro"
     networks:
-      skycloud-network:
+      - skycloud-network
 
-  nextcloud-web:
-    build: ./nextcloud/web
-    container_name: nextcloud-web
-    restart: always
+  collabora:
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+    expose:
+      - 9980
     ports:
-      - "8911:8911"
-    volumes:
-      - nextcloud:/var/www/html:z,ro
+      - 9980:9980
     environment:
-      - VIRTUAL_HOST=skycloud.yildizskylab.com
-      - LETSENCRYPT_HOST=
-      - LETSENCRYPT_EMAIL=
-    depends_on:
-      - nextcloud-fpm
-    networks:
-      skycloud-network:
-
-  nextcloud-cron:
-    image: nextcloud:fpm-alpine
-    container_name: nextcloud-cron
+      - domain=cloud\.yildizskylab\.com
+      - server_name=loolwsd.yildizskylab.com
+      - "extra_params=--o:ssl.enable=false --o:ssl.termination=true"
     restart: always
-    volumes:
-      - nextcloud:/var/www/html:z
-    entrypoint: /cron.sh
-    depends_on:
-      - db
-      - redis
+    cap_add:
+      - MKNOD
+    image: collabora/code
     networks:
-      skycloud-network:
- 
+      - skycloud-network
+
   nginx:
     image: nginx:alpine
     container_name: nginx
@@ -93,11 +70,12 @@ services:
       - ./certs/mycert.key:/etc/nginx/mycert.key
       - ./certs/mycert.crt:/etc/nginx/mycert.crt
       - ./nginx/conf.d/.:/etc/nginx/conf.d/.
-    labels:
-      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
-
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      - "extra_params=--o:ssl.enable=false  --o:ssl.termination=false"
     networks:
       skycloud-network:
+
 
 networks:
   skycloud-network:
@@ -105,13 +83,12 @@ networks:
     ipam:
       config:
         - subnet: 10.10.10.0/24
+
 volumes:
   nextcloud:
-  nextcloud-data:
-  nextcloud-config:
-  nextcloud-custom_apps:
+    name: "nextcloud"
   db:
   document_data:
   document_log:
-  
+    name: "onlyoffice-document-log"
 
