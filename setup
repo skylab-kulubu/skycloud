@@ -42,7 +42,6 @@ config_parser.add_argument("--nextcloud-subdomain", type=str, required=False,
 config_parser.add_argument("-p", "--pull-images", action="store_true",
                            help="Pull docker images after configuration.")
 
-
 args = parser.parse_args()
 
 
@@ -193,10 +192,7 @@ def random_env_passwds():
     # Nextcloud
     create_nextcloud_env(db_passwd, nextcloud_admin_passwd)
     
-    # Only Office
-    with open("./nextcloud/only-office/.env","w") as file:
-        config = f"JWT_SECRET={jwt_secret}"
-        file.write(config)
+    
 
 def write_mariadb_env_file(db_root_passwd, db_passwd):
     with open("./mariadb/.env","w") as file:
