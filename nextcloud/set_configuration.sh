@@ -3,6 +3,11 @@
 docker compose exec -u www-data nc php occ --no-warnings app:install forms
 docker compose exec -u www-data nc php occ --no-warnings app:install richdocuments
 docker compose exec -u www-data nc php occ --no-warnings app:install richdocumentscode
+
+# ARM64 Collabora App
+# docker compose exec -u www-data nc php occ --no-warnings app:install richdocumentscode_arm64
+
+
 docker compose exec -u www-data nc php occ --no-warnings app:install contacts
 docker compose exec -u www-data nc php occ --no-warnings app:install mail
 docker compose exec -u www-data nc php occ --no-warnings app:install spreed

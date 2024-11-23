@@ -11,6 +11,14 @@
 ## Collabora Kurulum
 `Apps` bölümünden `Hub Bundle` paketini indirmelisiniz. Ayarlar sekmesinden `Nextcloud Office` bölümüne girip gerekli ayarlamaları yapınız.
 
+### ARM64
+
+`nextcloud/set_configuration.sh` dosyasındaki gerekli değişiklikleri ARM64 kurulumu için yapmalısınız!
+```bash
+# ARM64 Collabora App
+docker compose exec -u www-data nc php occ --no-warnings app:install richdocumentscode_arm64
+```
+
 ## Nextcloud
 Gerekli ayarları yapmak için [.env](https://github.com/farukerdem34/homeserver/blob/alpine/nextcloud/example.env) dosyasını oluşturmalısınız.
 Örnek bir `nextcloud/.env` dosyası
