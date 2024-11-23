@@ -33,8 +33,8 @@ services:
       - REDIS_HOST=redis
     env_file:
       - ./nextcloud/.env
-    # ports:
-    #   - 80:80
+    ports:
+      - 80:80
     volumes:
       - nextcloud:/var/www/html
       - "/etc/localtime:/etc/localtime:ro"
@@ -59,22 +59,6 @@ services:
     networks:
       - skycloud-network
 
-  nginx:
-    image: nginx:alpine
-    container_name: nginx
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./certs/mycert.key:/etc/nginx/mycert.key
-      - ./certs/mycert.crt:/etc/nginx/mycert.crt
-      - ./nginx/conf.d/.:/etc/nginx/conf.d/.
-      - "/etc/localtime:/etc/localtime:ro"
-    environment:
-      - "extra_params=--o:ssl.enable=false  --o:ssl.termination=false"
-    networks:
-      skycloud-network:
 
 
 networks:
@@ -86,9 +70,5 @@ networks:
 
 volumes:
   nextcloud:
-    name: "nextcloud"
   db:
-  document_data:
-  document_log:
-    name: "onlyoffice-document-log"
 

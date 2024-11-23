@@ -1,0 +1,13 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./certs/mycert.key:/etc/nginx/mycert.key
+      - ./certs/mycert.crt:/etc/nginx/mycert.crt
+      - ./conf.d/.:/etc/nginx/conf.d/.
+      - "/etc/localtime:/etc/localtime:ro"
