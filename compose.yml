@@ -25,18 +25,12 @@ services:
   nc:
     image: nextcloud
     restart: always
-    expose:
-      - 80
-      - 9000
-    environment:
-      - MYSQL_HOST=db
-      - REDIS_HOST=redis
     env_file:
       - ./nextcloud/.env
     ports:
       - 80:80
     volumes:
-      - nextcloud:/var/www/html
+      - nextcloud:/var/www/html/data
       - "/etc/localtime:/etc/localtime:ro"
     networks:
       - skycloud-network
