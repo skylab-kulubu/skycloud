@@ -160,6 +160,18 @@ services:
 	- `--logging.level=warning` increases the level of logging to make debugging easier.
 #### cap_add
 `MKNOD` is a capability you give to `Collabora CODE` to facilitate your authorization management processes by providing access to your file system.
+### Nextcloud Integration
+You can install the app from Web UI > Apps > Richdocuments or command below:
+for `x86`:
+```bash
+docker compose exec -it nextcloud-app php occ app:install richdocumentscode
+docker compose exec -it nextcloud-app php occ app:enable richdocumentscode
+```
+for `arm64`:
+```bash
+docker compose exec -it nextcloud-app php occ app:install richdocumentscode_arm64
+docker compose exec -it nextcloud-app php occ app:enable richdocumentscode_arm64
+```
 ## NGINX
 ### nextcloud.conf
 ```
@@ -392,4 +404,11 @@ JIBRI_XMPP_PASSWORD=auth-pass
 #JITSI_IMAGE_VERSION=latest
 # Every attendant wait in loby until accepted.
 ENABLE_LOBBY=1
+```
+
+### Nextcloud Integration
+To install `Jitsi` app in nextcloud you can use Web UI > Apps > Jitsi Meet or command below
+```bash
+docker compose exec -it nextcloud-app php occ app:install jitsi
+docker compose exec -it nextcloud-app php occ app:enable jitsi
 ```
