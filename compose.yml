@@ -24,6 +24,20 @@ services:
     networks:
       - shared
       - nextcloud
+
+  collabora:
+    image: collabora/code:24.04.13.1.1
+    container_name: "collabora"
+    ports:
+      - 9980:9980/tcp
+    restart: always
+    env_file:
+      - collabora/.env
+    cap_add:
+      - MKNOD
+    networks:
+      - nextcloud
+
 networks:
   shared:
     external: true
