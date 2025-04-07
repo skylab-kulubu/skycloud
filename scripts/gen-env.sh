@@ -8,10 +8,10 @@ generate_nextcloud() {
   env_file="nextcloud/.env"
   content=$(
     cat <<NEXTCLOUDENV
-MYSQL_PASSWORD=$db_password
-MYSQL_DATABASE=nextcloud
-MYSQL_USER=nextcloud
-MYSQL_HOST=nextcloud-db
+MARIADB_PASSWORD=$db_password
+MARIADB_DATABASE=nextcloud
+MARIADB_USER=nextcloud
+MARIADB_HOST=nextcloud-db
 NEXTCLOUDENV
   )
   echo $content | tee $env_file
@@ -20,12 +20,12 @@ NEXTCLOUDENV
 generate_mariadb() {
   env_file="mariadb/.env"
   content=$(
-    cat <<MYSQL_ENV
-MYSQL_ROOT_PASSWORD=$db_root_password
-MYSQL_PASSWORD=$db_password
-MYSQL_DATABASE=nextcloud
-MYSQL_USER=nextcloud
-MYSQL_ENV
+    cat <<MARIADB_ENV
+MARIADB_ROOT_PASSWORD=$db_root_password
+MARIADB_PASSWORD=$db_password
+MARIADB_DATABASE=nextcloud
+MARIADB_USER=nextcloud
+MARIADB_ENV
   )
   echo content | tee $env_file
 }
