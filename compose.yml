@@ -9,11 +9,7 @@ services:
     command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
     volumes:
       - db:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=<password>
-      - MYSQL_PASSWORD=<password>
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
+    env_file: mariadb/.env
     networks:
       - nextcloud
 
@@ -26,11 +22,7 @@ services:
       - nextcloud-db
     volumes:
       - /mnt/skycloud:/var/www/html
-    environment:
-      - MYSQL_PASSWORD=<password>
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
-      - MYSQL_HOST=nextcloud-db
+    env_file: nenxtcloud/.env
     networks:
       - shared
       - nextcloud
