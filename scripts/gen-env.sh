@@ -27,7 +27,7 @@ MARIADB_DATABASE=nextcloud
 MARIADB_USER=nextcloud
 MARIADB_ENV
   )
-  echo content | tee $env_file
+  echo $content | tee $env_file
 }
 
 generate_collabora() {
