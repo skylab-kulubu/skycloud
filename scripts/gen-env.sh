@@ -34,7 +34,7 @@ generate_collabora() {
   env_file="collabora/.env"
   content=$(
     cat <<COLLABORA_ENV
-aliasgroup1=https://$domain:443
+aliasgroup1=https://code.$domain:443
 username=admin
 password=$code_password
 dictionaries=en_US,tr_TR
@@ -46,7 +46,7 @@ COLLABORA_ENV
 db_password=$(generate_password)
 db_root_password=$(generate_password)
 code_password=$(generate_password)
-domain=$1
+domain=${1:-domain.tld}
 generate_nextcloud
 generate_mariadb
 generate_collabora
