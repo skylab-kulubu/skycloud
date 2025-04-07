@@ -1,0 +1,19 @@
+services:
+  collabora:
+    image: collabora/code:24.04.13.1.1
+    container_name: "collabora"
+    ports:
+      - 9980:9980/tcp
+    restart: always
+    environment:
+      - aliasgroup1=https://cloud.domain.tld:443
+      - username=admin
+      - password=admin
+      - dictionaries=en_US,tr_TR
+      - extra_params=
+        --o=ssl.enable=false
+        --o:ssl.termination=true
+        --o:user_interface.mode=compact
+        --o:logging.level=warning
+    cap_add:
+      - MKNOD

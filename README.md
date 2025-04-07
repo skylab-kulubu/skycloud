@@ -1,173 +1,395 @@
 # Skycloud
 
-<div align="center">
-<img src="https://img.shields.io/badge/Alpine_Linux-0D597F?style=for-the-badge&logo=alpine-linux&logoColor=white" \> <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"></img> <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"></img> </img> <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white"/> <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white"></img> <img src="https://img.shields.io/badge/redis-CC0000.svg?&style=for-the-badge&logo=redis&logoColor=white"\> <img src="https://img.shields.io/badge/Nextcloud-0082C9?style=for-the-badge&logo=Nextcloud&logoColor=white"></img> 
-</div>
+The project consists of 3 sub-parts, `Nextcloud`, ``Collabora CODE`` and `NGINX` Reverse Proxy.
+
+- nextcloud is the main component for storing, processing and accessing data, all other components provide access to `Nextcloud` or improve the efficiency of `Nextcloud`.
+- ``Collabora CODE`` enables collaborative work and editing of various documents to work with `Nextcloud`
+- `NGINX` Reverse Proxy allows you to access `Nextcloud` through the domain name and make the necessary redirections
 
 ## Nextcloud
-Gerekli ayarları yapmak için [.env](https://github.com/farukerdem34/homeserver/blob/alpine/nextcloud/example.env) dosyasını oluşturmalısınız.
-Örnek bir `nextcloud/.env` dosyası
+`compose.yml`:
+```yaml
+volumes:
+  nextcloud:
+  db:
+
+services:
+  nextcloud-db:
+    image: mariadb:10.6
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=<password>
+      - MYSQL_PASSWORD=<password>
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    networks:
+      - nextcloud
+
+  nextcloud-app:
+    image: nextcloud
+    restart: always
+    ports:
+      - 8080:80
+    links:
+      - nextcloud-db
+    volumes:
+      - /mnt/skycloud:/var/www/html
+    environment:
+      - MYSQL_PASSWORD=<password>
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_HOST=nextcloud-db
+    networks:
+      - shared
+      - nextcloud
+networks:
+  shared:
+    external: true
+  nextcloud:
 ```
+
+### Volumes
+```yaml
+volumes:
+  nextcloud:
+  db:
+```
+- The ``Nextcloud`` storage is where all `Nextcloud` data is stored, including `App` and `Configuration` storage.
+- The `db` storage holds all the data for the `MariaDB` database
+### Networks
+
+```yaml
+networks:
+  shared:
+    external: true
+  nextcloud:
+```
+
+- The ``shared`` network is used to communicate with containers in other compose projects and is not a project dependency, it is created manually.
+- The ``Nextcloud`` network is used as a private network to mediate communication between containers in the `Skycloud` project.
+### Services
+#### Nextcloud-db
+```yaml
+nextcloud-db:
+    image: mariadb:10.6
+    restart: always
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=<password>
+      - MYSQL_PASSWORD=<password>
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    networks:
+      - nextcloud
+```
+
+It connects to the ``Nextcloud`` network and allows other containers to access the database and installs it with the following environment variables.
+```
+MYSQL_ROOT_PASSWORD=<password>
+MYSQL_PASSWORD=<password>
 MYSQL_DATABASE=nextcloud
 MYSQL_USER=nextcloud
-MYSQL_PASSWORD=nextcloud
-MYSQL_HOST=db
-NEXTCLOUD_TRUSTED_DOMAINS=skycloud.yildizskylab.com cloud.yildizskylab.com
-NEXTCLOUD_ADMIN_USER=nextcloud
-NEXTCLOUD_ADMIN_PASSWORD=nextcloud
 ```
-### Dosya Yükleme Boyutu Sınırı
-[./nextcloud/web/nginx.conf](https://github.com/farukerdem34/homeserver/blob/alpine/nextcloud/web/nginx.conf) 62. satırdaki `client_max_body_size` değişkenini düzenleyerek dosya yükleme boyutun ayarlayabilirisiniz.
-
-Nextcloud hakkında daha fazla ortam değişkeni [için](https://hub.docker.com/_/nextcloud#docker-secrets)
-
-## MySQL
-Gerekli ayarları yapmak için [.env](https://github.com/farukerdem34/homeserver/blob/alpine/mysql/example.env) dosyasını oluşturmalısınız.
-Örnek bir `mysql/.env` dosyası
+#### nextcloud-app
+```yaml
+nextcloud-app:
+    image: nextcloud
+    restart: always
+    ports:
+      - 8080:80
+    links:
+      - nextcloud-db
+    volumes:
+      - /mnt/skycloud:/var/www/html
+    environment:
+      - MYSQL_PATABASE=nextcloud
+      - MYSQL_USERSSWORD=<password>
+      - MYSQL_DA=nextcloud
+      - MYSQL_HOST=nextcloud-db
+    networks:
+      - shared
+      - nextcloud
 ```
-MARIADB_ROOT_PASSWORD=nextcloud
-MYSQL_DATABASE=nextcloud
-MYSQL_USER=nextcloud
-MYSQL_PASSWORD=nextcloud
+
+It connects to the ``Nextcloud`` network to connect to the database, and connects to the `shared` network to access containers of third party plugins *(for example ``Collabora CODE``)*.
+It connects the `/var/www/html` folder in the container to the `/mnt/skycloud` *(in this case external HDD)* folder on the host machine.
+It provides the necessary configurations with the following environment variables.
 ```
-MySQL hakkında daha fazla ortam değişken [için](https://dev.mysql.com/doc/refman/5.7/en/environment-variables.html)
+MYSQL_PATABASE=nextcloud
+MYSQL_USERSSWORD=<password>
+MYSQL_DA=nextcloud
+MYSQL_HOST=nextcloud-db
+```
 
-## Nginx
-- [X] HTTPS eklenecek
-`HTTPS` kullanımı için `gencert` scriptini çalıştırarak sertifikaları `certs` klasörüne eklemelisiniz.
+## Collabora CODE
+`compose.yml`
+```yaml
+services:
+  collabora:
+    image: collabora/code:24.04.13.1.1
+    container_name: 'collabora'
+    ports:
+      - 9980:9980/tcp
+    restart: always
+    environment:
+      - aliasgroup1=https://cloud.domain.tld:443
+      - username=admin
+      - password=admin
+      - dictionaries=en_US,tr_TR
+      - extra_params=
+        --o=ssl.enable=false
+        --o:ssl.termination=true
+        --o:user_interface.mode=compact
+        --o:logging.level=warning
+    cap_add:
+      - MKNOD
+```
+#### environment
+- `aliasgroup1` specifies the URL from which your `Nextcloud` is accessed, in this example it is `https://cloud.domain.tld:443`, details for this URL will be mentioned in ``NGINX`` settings
+- `username` and `password` are the credentials you will use to log in to the admin panel for ``Collabora CODE``
+- `dictionaries` argument to specify which languages to use when editing documents
+- `extra_params` specifies which parameters to use at the start of ``Collabora CODE``.
+	- `--o:ssl.enable=false` specifies that ``Collabora CODE`` should not use SSL, it is in your best interest to provide SSL access through `NGINX` with certificates from a certificate provider.
+	- `--o:ssl_termination=true` ``NGINX`` specifies that you will use SSL certificates in your reverse proxy settings and that it will work accordingly.
+	- `--o:user_interface.mode=compact` specifies that the user interface will run in compact mode.
+	- `--logging.level=warning` increases the level of logging to make debugging easier.
+#### cap_add
+`MKNOD` is a capability you give to `Collabora CODE` to facilitate your authorization management processes by providing access to your file system.
+## NGINX
+### nextcloud.conf
+```
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
 
-Bunun için aşağıdaki komutu `gencert` klasörünün içerisinde çalıştırmanız yeterli olacaktır.
+    server_name cloud.domain.tld;
+
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+    ssl_certificate /etc/ssl/skycloud/fullchain.pem;
+    ssl_certificate_key /etc/ssl/skycloud/privkey.pem;
+	
+    location / {
+        proxy_pass http://<Nextcloud IPv4 Address>:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+	#proxy_set_header X-Forwarded-Prefix /;
+    }
+}
+
+
+server {
+    listen 80;
+
+    server_name cloud.domain.tld;
+
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+	
+    location / {
+	if ($remote_addr != <Collabora CODE IPv4 Address>){
+		return 302 https://$host$request_uri;
+	}
+        proxy_pass http://<Nextcloud IPv4 Address>:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+	proxy_set_header X-Forwarded-Prefix /;
+    }
+}
+```
+
+### collabora.conf
+```
+server {
+ listen       443 ssl;
+
+ server_name  code.domain.tld;
+ ssl_certificate /etc/ssl/code.domain.tld/certificate.crt;
+ ssl_certificate_key /etc/ssl/code.domain.tld/private.key;
+ 
+ # static files
+ location ^~ /browser {
+   proxy_pass http://<Collabora CODE IPv4 Address>:9980;
+   proxy_set_header Host $host;
+ }
+
+ # WOPI discovery URL
+ location ^~ /hosting/discovery {
+   proxy_pass http://<Collabora CODE IPv4 Address>:9980;
+   proxy_set_header Host $host;
+ }
+
+ # Capabilities
+ location ^~ /hosting/capabilities {
+   proxy_pass http://<Collabora CODE IPv4 Address>:9980;
+   proxy_set_header Host $host;
+ }
+
+ # main websocket
+ location ~ ^/cool/(.*)/ws$ {
+   proxy_pass http://<Collabora CODE IPv4 Address>:9980;
+   proxy_set_header Upgrade $http_upgrade;
+   proxy_set_header Connection "Upgrade";
+   proxy_set_header Host $host;
+   proxy_read_timeout 36000s;
+ }
+
+ # download, presentation and image upload
+ location ~ ^/(c|l)ool {
+   proxy_pass http://<Collabora CODE IPv4 Address>:9980;
+   proxy_set_header Host $host;
+ }
+
+ # Admin Console websocket
+ location ^~ /cool/adminws {
+   proxy_pass http://<Collabora CODE IPv4 Address>:9980;
+   proxy_set_header Upgrade $http_upgrade;
+   proxy_set_header Connection "Upgrade";
+   proxy_set_header Host $host;
+   proxy_read_timeout 36000s;
+ }
+}
+```
+
+**Importtant Note:** You can use IPv4 addresses of Collabora CODE and Nextcloud in VPN *(etc Wireguard, OpenVPN)*. 
+
+## Jitsi Meet
+### [Offical Installation Guide](https://jitsi.github.io/handbook/docs/devops-guide/devops-guide-docker/#quick-start)
 ```bash
-❯ yes NA | bash ../gencert
+wget $(curl -s https://api.github.com/repos/jitsi/docker-jitsi-meet/releases/latest | grep 'zip' | cut -d\" -f4)
+unzip <filename>
+cp env.example .env
+./gen-passwords.sh
+mkdir -p ~/.jitsi-meet-cfg/{web,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri}
 ```
-- [X] SSL Sertifika otomasyonu eklenecek
+change `PUBLIC_URL` in `.env`
+after completing all steps `docker compose up -d` and you can acces the `Jitsi Meet` from `https://public-ip-address:8443`, if you want to use the `Jitsi Meet` with `Nextcloud` check the `.env` header.
+### .env
+```env
+# shellcheck disable=SC2034
 
-> Not: bunun için `openssl` paketinin sisteminizde kurulu olması gereklidir.
-
-# Canlıya Almadan Önce!
-nginx/nginx.conf dosyasındaki `skylab` değerlerini alan adı ile değiştirin!
-
-# Kurulum
-Sisteminizde `Docker` kurulu olmalı, eğer önceden `Docker` kurulu bir sisteminiz varsa ve sisteminizin paket yöneticisi aracılığıyla indirmişseniz `Docker`ı sisteminizden öncelikle silin ve aşağıdaki adımları izleyerek sisteminize `Docker` yükleyin.
-Ubuntu
-```bash
-for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; \
-do sudo apt-get remove $pkg; \
-done
-```
-
-RHEL/Fedora
-```bash
-sudo yum remove docker \
-                  docker-client \
-                  docker-client-latest \
-                  docker-common \
-                  docker-latest \
-                  docker-latest-logrotate \
-                  docker-logrotate \
-                  docker-engine \
-                  podman \
-                  runc
-```
-ardından `Docker` yüklemek için
-```
-curl -fsSL https://get.docker.com -o get-docker.sh && sudo bash get-docker.sh
-```
-`Docker` kurulumu gerçekleştikten sonra
-```bash
-git clone https://github.com/farukerdem34/homeserver.git
-```
-```bash
-cd homeserver
-```
-```bash
-docker compose up -d
-```
-NextCloud uygulamasına erişim sağladıktan sonra `nextcloud` klasörünün içerisinde bulunan `set_configuration.sh` dosyasını aşağıdaki komut ile çalıştırın.
-```bash
-bash nextcloud/set_configuration.sh
-```
-
-# Kurulum Scripti
-
-```bash
-❯ ./setup -h
-usage: setup [-h] {server,config,backup} ...
-
-Homeserver setup util
-
-positional arguments:
-  {server,config,backup}
-
-options:
-  -h, --help            show this help message and exit
-```
-
-```bash
-❯ ./setup server -h
-usage: setup server [-h] [-r] [--install-docker] [--hard-installation] 
-
-options:
-  -h, --help           show this help message and exit
-  -r, --run-server     Start server
-  --install-docker     Install docker engine.
-  --hard-installation  Remove docker engine before installation. Only RHEL&Debian based distros!
-```
-
-```bash
-❯ ./setup config -h
-usage: setup config [-h] [-c] [--pass-certificate-arguments] [--default-env-files] [-d DOMAIN] [--upload-size UPLOAD_SIZE] [--nextcloud-subdomain NEXTCLOUD_SUBDOMAIN] [-p] 
-
-options:
-  -h, --help            show this help message and exit
-  -c, --generate-certificates
-                        Set this value if you want SSL certificates to be generated, set it to 'False' or leave it blank if you want to use test certificates.
-  --pass-certificate-arguments
-  --default-env-files   Set to 'True' if you want .env files to be created using standard instance files.
-  -d DOMAIN, --domain DOMAIN
-                        Set Nginx nameserver
-  --upload-size UPLOAD_SIZE
-                        File upload size limit, 0 is unlimited. Example: 16G, 100M.
-  --nextcloud-subdomain NEXTCLOUD_SUBDOMAIN
-                        nextcloud.example.com --> replaces nextcloud to any subdomain string
-  -p, --pull-images     Pull docker images after configuration.
-```
-```bash
-❯ ./setup backup -h
-usage: setup backup [-h] [-a] [-n] [-s] [-g] [-of] [--dest DEST]
-
-options:
-  -h, --help          show this help message and exit
-  -a, --all
-  -n, --nextcloud
-  -of, --only-office
-  --dest DEST         backup destination
-```
-
-Hızlı başlangıç için;
-
-```bash
-./setup config -c --pass-certificate-arguments --default-env-files
-./setup server -r
-```
-
-# Kurulum Sonrası
-Nextcloud içerisinde `Forms` ve `ONLYOFFICE` kullanımını aktifleştirmek için **Nextcloud'a giriş yaptıktan sonra** aşağıdaki komutu çalıştırın.
-
-```bash
-bash nextcloud/set_configuration.sh
-```
-
-## Bilgisayarınız Test İçin Çalıştırmak İçin
-Yerel bilgisayarınızda Linux veya MacOs ise `/etc/hosts`, Windows ise `C:\Windows\System32\drivers\etc\hosts` dosyasını aşağıdak gibi düzenleyin.
-```bash
-# Loopback entries; do not change.
-# For historical reasons, localhost precedes localhost.localdomain:
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-# See hosts(5) for proper format and other examples:
-# 192.168.1.10 foo.example.org foo
-# 192.168.1.13 bar.example.org bar
+################################################################################
+################################################################################
+# Welcome to the Jitsi Meet Docker setup!
 #
-127.0.0.1  skycloud.yildizskylab.com
+# This sample .env file contains some basic options to get you started.
+# The full options reference can be found here:
+# https://jitsi.github.io/handbook/docs/devops-guide/devops-guide-docker
+################################################################################
+################################################################################
+
+
+#
+# Basic configuration options
+#
+
+# Directory where all configuration will be stored
+CONFIG=~/.jitsi-meet-cfg
+
+# Exposed HTTP port (will redirect to HTTPS port)
+HTTP_PORT=80
+
+# Exposed HTTPS port
+HTTPS_PORT=443
+
+# System time zone
+TZ=UTC
+
+# Public URL for the web service (required)
+# Keep in mind that if you use a non-standard HTTPS port, it has to appear in the public URL
+PUBLIC_URL=https://meet.domain.tld:${HTTPS_PORT}
+
+
+# Enable Let's Encrypt certificate generation
+ENABLE_LETSENCRYPT=1
+
+# Domain for which to generate the certificate
+LETSENCRYPT_DOMAIN=meet.domain.tld
+
+# E-Mail for receiving important account notifications (mandatory)
+LETSENCRYPT_EMAIL=info@domain.tld
+
+
+# Set ACME server. Default is zerossl, you can peek one at https://github.com/acmesh-official/acme.sh/wiki/Server
+#LETSENCRYPT_ACME_SERVER="letsencrypt"
+
+
+
+#
+# Authentication configuration (see handbook for details)
+#
+
+# Enable authentication (will ask for login and password to join the meeting)
+ENABLE_AUTH=1
+
+# Enable guest access (if authentication is enabled, this allows for users to be held in lobby until registered user lets them in)
+ENABLE_GUESTS=1
+
+# Select authentication type: internal, jwt, ldap or matrix
+AUTH_TYPE=jwt
+
+# JWT authentication
+#
+
+# Application identifier
+JWT_APP_ID=skycloud
+
+# Application secret known only to your token generator
+JWT_APP_SECRET=jwt-secret-here
+
+# (Optional) Set asap_accepted_issuers as a comma separated list
+#JWT_ACCEPTED_ISSUERS=my_web_client,my_app_client
+
+# (Optional) Set asap_accepted_audiences as a comma separated list
+#JWT_ACCEPTED_AUDIENCES=my_server1,my_server2
+
+
+#
+# Security
+#
+# Set these to strong passwords to avoid intruders from impersonating a service account
+# The service(s) won't start unless these are specified
+# Running ./gen-passwords.sh will update .env with strong passwords
+# You may skip the Jigasi and Jibri passwords if you are not using those
+# DO NOT reuse passwords
+#
+
+# XMPP password for Jicofo client connections
+JICOFO_AUTH_PASSWORD=auth-pass
+
+# XMPP password for JVB client connections
+JVB_AUTH_PASSWORD=auth-pass
+
+# XMPP password for Jigasi MUC client connections
+JIGASI_XMPP_PASSWORD=auth-pass
+
+# XMPP password for Jigasi transcriber client connections
+JIGASI_TRANSCRIBER_PASSWORD=auth-pass
+
+# XMPP recorder password for Jibri client connections
+JIBRI_RECORDER_PASSWORD=auth-pass
+
+# XMPP password for Jibri client connections
+JIBRI_XMPP_PASSWORD=auth-pass
+
+#
+# Docker Compose options
+#
+
+# Container restart policy
+#RESTART_POLICY=unless-stopped
+
+# Jitsi image version (useful for local development)
+#JITSI_IMAGE_VERSION=latest
+# Every attendant wait in loby until accepted.
+ENABLE_LOBBY=1
 ```
