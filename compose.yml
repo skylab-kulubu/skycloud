@@ -1,7 +1,3 @@
-volumes:
-  nextcloud:
-  db:
-
 services:
   nextcloud-db:
     image: mariadb:10.6
@@ -21,7 +17,7 @@ services:
     links:
       - nextcloud-db
     volumes:
-      - /mnt/skycloud:/var/www/html
+      - nextcloud:/var/www/html
     env_file: nenxtcloud/.env
     networks:
       - shared
@@ -30,3 +26,7 @@ networks:
   shared:
     external: true
   nextcloud:
+
+volumes:
+  nextcloud:
+  db:
