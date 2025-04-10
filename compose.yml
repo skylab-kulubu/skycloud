@@ -5,6 +5,7 @@ services:
     command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
     volumes:
       - db:/var/lib/mysql
+      - db-logs:/var/log/mysql
     env_file:
       - mariadb/.env
     networks:
@@ -46,3 +47,4 @@ networks:
 volumes:
   nextcloud:
   db:
+  db-logs:
