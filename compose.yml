@@ -20,6 +20,7 @@ services:
       - nextcloud-db
     volumes:
       - nextcloud:/var/www/html
+      - nextcloud-logs:/var/log
     env_file:
       - nextcloud/.env
     networks:
@@ -46,5 +47,6 @@ networks:
 
 volumes:
   nextcloud:
+  nextcloud-logs:
   db:
   db-logs:
