@@ -173,6 +173,10 @@ docker compose exec -it nextcloud-app php occ app:install richdocumentscode_arm6
 docker compose exec -it nextcloud-app php occ app:enable richdocumentscode_arm64
 ```
 ## NGINX
+You can run the docker container for `NGINX` for testing purposes using the following command:
+```bash
+docker run -d -p 80:80 -p 443:433 -v ./nginx:/etc/nginx/conf.d -v /path/to/certificate.crt:/etc/nginx/ssl/certificate.crt nginx
+```
 ### nextcloud.conf
 ```
 server {
