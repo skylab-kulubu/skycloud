@@ -15,7 +15,7 @@ services:
     image: nextcloud
     restart: always
     ports:
-      - 8080:80
+      - 10.0.0.1:8080:80/tcp
     links:
       - nextcloud-db
     volumes:
@@ -31,7 +31,7 @@ services:
     image: collabora/code:24.04.13.1.1
     container_name: "collabora"
     ports:
-      - 9980:9980/tcp
+      - 10.0.0.1:9980:9980/tcp
     restart: always
     env_file:
       - collabora/.env
