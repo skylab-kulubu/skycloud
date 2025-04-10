@@ -7,7 +7,9 @@ The project consists of 3 sub-parts, `Nextcloud`, ``Collabora CODE`` and `NGINX`
 - `NGINX` Reverse Proxy allows you to access `Nextcloud` through the domain name and make the necessary redirections
 
 ## Nextcloud
+
 `compose.yml`:
+
 ```yaml
 volumes:
   nextcloud:
@@ -52,13 +54,16 @@ networks:
 ```
 
 ### Volumes
+
 ```yaml
 volumes:
   nextcloud:
   db:
 ```
+
 - The ``Nextcloud`` storage is where all `Nextcloud` data is stored, including `App` and `Configuration` storage.
 - The `db` storage holds all the data for the `MariaDB` database
+
 ### Networks
 
 ```yaml
@@ -70,8 +75,11 @@ networks:
 
 - The ``shared`` network is used to communicate with containers in other compose projects and is not a project dependency, it is created manually.
 - The ``Nextcloud`` network is used as a private network to mediate communication between containers in the `Skycloud` project.
+
 ### Services
+
 #### Nextcloud-db
+
 ```yaml
 nextcloud-db:
     image: mariadb:10.6
@@ -89,13 +97,16 @@ nextcloud-db:
 ```
 
 It connects to the ``Nextcloud`` network and allows other containers to access the database and installs it with the following environment variables.
+
 ```
 MYSQL_ROOT_PASSWORD=<password>
 MYSQL_PASSWORD=<password>
 MYSQL_DATABASE=nextcloud
 MYSQL_USER=nextcloud
 ```
+
 #### nextcloud-app
+
 ```yaml
 nextcloud-app:
     image: nextcloud
@@ -119,6 +130,7 @@ nextcloud-app:
 It connects to the ``Nextcloud`` network to connect to the database, and connects to the `shared` network to access containers of third party plugins *(for example ``Collabora CODE``)*.
 It connects the `/var/www/html` folder in the container to the `/mnt/skycloud` *(in this case external HDD)* folder on the host machine.
 It provides the necessary configurations with the following environment variables.
+
 ```
 MYSQL_PATABASE=nextcloud
 MYSQL_USERSSWORD=<password>
@@ -127,7 +139,9 @@ MYSQL_HOST=nextcloud-db
 ```
 
 ## Collabora CODE
+
 `compose.yml`
+
 ```yaml
 services:
   collabora:
@@ -149,35 +163,49 @@ services:
     cap_add:
       - MKNOD
 ```
+
 #### environment
+
 - `aliasgroup1` specifies the URL from which your `Nextcloud` is accessed, in this example it is `https://cloud.domain.tld:443`, details for this URL will be mentioned in ``NGINX`` settings
 - `username` and `password` are the credentials you will use to log in to the admin panel for ``Collabora CODE``
 - `dictionaries` argument to specify which languages to use when editing documents
 - `extra_params` specifies which parameters to use at the start of ``Collabora CODE``.
-	- `--o:ssl.enable=false` specifies that ``Collabora CODE`` should not use SSL, it is in your best interest to provide SSL access through `NGINX` with certificates from a certificate provider.
-	- `--o:ssl_termination=true` ``NGINX`` specifies that you will use SSL certificates in your reverse proxy settings and that it will work accordingly.
-	- `--o:user_interface.mode=compact` specifies that the user interface will run in compact mode.
-	- `--logging.level=warning` increases the level of logging to make debugging easier.
+  - `--o:ssl.enable=false` specifies that ``Collabora CODE`` should not use SSL, it is in your best interest to provide SSL access through `NGINX` with certificates from a certificate provider.
+  - `--o:ssl_termination=true` ``NGINX`` specifies that you will use SSL certificates in your reverse proxy settings and that it will work accordingly.
+  - `--o:user_interface.mode=compact` specifies that the user interface will run in compact mode.
+  - `--logging.level=warning` increases the level of logging to make debugging easier.
+
 #### cap_add
+
 `MKNOD` is a capability you give to `Collabora CODE` to facilitate your authorization management processes by providing access to your file system.
+
 ### Nextcloud Integration
+
 You can install the app from Web UI > Apps > Richdocuments or command below:
 for `x86`:
+
 ```bash
 docker compose exec -it nextcloud-app php occ app:install richdocumentscode
 docker compose exec -it nextcloud-app php occ app:enable richdocumentscode
 ```
+
 for `arm64`:
+
 ```bash
 docker compose exec -it nextcloud-app php occ app:install richdocumentscode_arm64
 docker compose exec -it nextcloud-app php occ app:enable richdocumentscode_arm64
 ```
+
 ## NGINX
+
 You can run the docker container for `NGINX` for testing purposes using the following command:
+
 ```bash
 docker run -d -p 80:80 -p 443:433 -v ./nginx:/etc/nginx/conf.d -v /path/to/certificate.crt:/etc/nginx/ssl/certificate.crt nginx
 ```
+
 ### nextcloud.conf
+
 ```
 server {
     listen 443 ssl;
@@ -189,14 +217,14 @@ server {
     error_log /var/log/nginx/error.log;
     ssl_certificate /etc/ssl/skycloud/fullchain.pem;
     ssl_certificate_key /etc/ssl/skycloud/privkey.pem;
-	
+ 
     location / {
         proxy_pass http://<Nextcloud IPv4 Address>:8080;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-	#proxy_set_header X-Forwarded-Prefix /;
+ #proxy_set_header X-Forwarded-Prefix /;
     }
 }
 
@@ -208,22 +236,23 @@ server {
 
     access_log /var/log/nginx/access.log;
     error_log /var/log/nginx/error.log;
-	
+ 
     location / {
-	if ($remote_addr != <Collabora CODE IPv4 Address>){
-		return 302 https://$host$request_uri;
-	}
+ if ($remote_addr != <Collabora CODE IPv4 Address>){
+  return 302 https://$host$request_uri;
+ }
         proxy_pass http://<Nextcloud IPv4 Address>:8080;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-	proxy_set_header X-Forwarded-Prefix /;
+ proxy_set_header X-Forwarded-Prefix /;
     }
 }
 ```
 
 ### collabora.conf
+
 ```
 server {
  listen       443 ssl;
@@ -276,10 +305,12 @@ server {
 }
 ```
 
-**Importtant Note:** You can use IPv4 addresses of Collabora CODE and Nextcloud in VPN *(etc Wireguard, OpenVPN)*. 
+**Importtant Note:** You can use IPv4 addresses of Collabora CODE and Nextcloud in VPN *(etc Wireguard, OpenVPN)*.
 
 ## Jitsi Meet
+
 ### [Offical Installation Guide](https://jitsi.github.io/handbook/docs/devops-guide/devops-guide-docker/#quick-start)
+
 ```bash
 wget $(curl -s https://api.github.com/repos/jitsi/docker-jitsi-meet/releases/latest | grep 'zip' | cut -d\" -f4)
 unzip <filename>
@@ -287,9 +318,12 @@ cp env.example .env
 ./gen-passwords.sh
 mkdir -p ~/.jitsi-meet-cfg/{web,transcripts,prosody/config,prosody/prosody-plugins-custom,jicofo,jvb,jigasi,jibri}
 ```
+
 change `PUBLIC_URL` in `.env`
 after completing all steps `docker compose up -d` and you can acces the `Jitsi Meet` from `https://public-ip-address:8443`, if you want to use the `Jitsi Meet` with `Nextcloud` check the `.env` header.
+
 ### .env
+
 ```env
 # shellcheck disable=SC2034
 
@@ -411,8 +445,31 @@ ENABLE_LOBBY=1
 ```
 
 ### Nextcloud Integration
+
 To install `Jitsi` app in nextcloud you can use Web UI > Apps > Jitsi Meet or command below
+
 ```bash
 docker compose exec -it nextcloud-app php occ app:install jitsi
 docker compose exec -it nextcloud-app php occ app:enable jitsi
 ```
+
+## Security
+
+### Port Forwardings
+
+In order to reduce your attack surface, you should only forward to the network interfaces you need in the port assignments you perform through Docker. Docker does port forwarding to all network interfaces by default! For example:
+
+```yaml
+ports:
+   - “80:80”
+```
+
+instead of using
+
+```yaml
+ports:
+   - “10.0.0.1:80:80”
+```
+
+use of the product.
+The rules you write with `UFW` will be invalid for Docker!
