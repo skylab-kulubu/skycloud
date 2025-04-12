@@ -50,9 +50,9 @@ COLLABORA_ENV
   )
   echo $content | tee $env_file
 }
-db_password=$(generate_password)
-db_root_password=$(generate_password)
-code_password=$(generate_password)
+db_password=generate_password
+db_root_password=generate_password
+code_password=generate_password
 nextcloud_admin_password=generate_password
 domain=${1:-domain.tld}
 generate_nextcloud
