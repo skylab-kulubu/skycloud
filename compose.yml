@@ -26,6 +26,10 @@ services:
     networks:
       - shared
       - nextcloud
+    # DNS Records For Testing
+    # extra_hosts:
+    #   - "code.yildizskylab.test:YOUR.TEST.IP.V4"
+    #   - "cloud.yildizskylab.test:YOUR.TEST.IP.V4"
 
   collabora:
     image: collabora/code:24.04.13.1.1
@@ -40,6 +44,10 @@ services:
     networks:
       - nextcloud
       - shared
+    # DNS Records For Testing
+    # extra_hosts:
+    #   - "code.yildizskylab.test:YOUR.TEST.IP.V4"
+    #   - "cloud.yildizskylab.test:YOUR.TEST.IP.V4"
 
 networks:
   shared:
