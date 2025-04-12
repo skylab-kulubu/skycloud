@@ -39,6 +39,7 @@ services:
       - MKNOD
     networks:
       - nextcloud
+      - shared
 
 networks:
   shared:
