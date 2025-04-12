@@ -12,6 +12,10 @@ MARIADB_PASSWORD=$db_password
 MARIADB_DATABASE=nextcloud
 MARIADB_USER=nextcloud
 MARIADB_HOST=nextcloud-db
+NEXTCLOUD_ADMIN_USER=nextcloud
+NEXTCLOUD_ADMIN_PASSWORD=$nextcloud_admin_password
+NEXTCLOUD_LOG_FILE=/var/log/nextcloud/nextcloud.log
+PHP_LOG_FILE=/var/log/php/error.log
 NEXTCLOUDENV
   )
   echo $content | tee $env_file
@@ -25,6 +29,9 @@ MARIADB_ROOT_PASSWORD=$db_root_password
 MARIADB_PASSWORD=$db_password
 MARIADB_DATABASE=nextcloud
 MARIADB_USER=nextcloud
+MYSQL_GENERAL_LOG=1
+MYSQL_GENERAL_LOG_FILE=/var/log/mysql/mariadb.log
+MYSQL_LOG_ERROR=/var/log/mysql/mariadb-error.log
 MARIADB_ENV
   )
   echo $content | tee $env_file
@@ -46,6 +53,7 @@ COLLABORA_ENV
 db_password=$(generate_password)
 db_root_password=$(generate_password)
 code_password=$(generate_password)
+nextcloud_admin_password=generate_password
 domain=${1:-domain.tld}
 generate_nextcloud
 generate_mariadb
