@@ -53,6 +53,14 @@ networks:
   nextcloud:
 ```
 
+#### External Drive Mounting
+
+When using an external storage device such as `/mnt/skycloud`, the folder and user permissions should be configured as `www-data:root`.
+
+```bash
+sudo chown www-data:root -R /mnt/skycloud
+```
+
 ### Volumes
 
 ```yaml
